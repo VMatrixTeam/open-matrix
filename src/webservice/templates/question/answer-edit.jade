@@ -1,0 +1,56 @@
+
+extend ../layouts/main.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/question/css/detail.css")}}')
+  link(rel='stylesheet', href='{{static_url("base/css/github-markdown.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/simple-mde/simplemde.min.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/highlight/styles/github.css")}}')
+  style.
+    .CodeMirror, .CodeMirror-scroll {
+        min-height: 300px;
+        background: none !important;
+    }
+
+    .CodeMirror {
+        height: 300px;
+        background: none !important;
+    }
+  
+block js
+  script(src='{{static_url("vender/marked.js")}}')
+  script(src='{{static_url("vender/attachment/inline-attachment.js")}}')
+  script(src='{{static_url("vender/attachment/codemirror-4.inline-attachment.js")}}')
+  script(src='{{static_url("vender/simple-mde/simplemde.min.js")}}')
+  script(src='{{static_url("vender/highlight/highlight.pack.js")}}') 
+  script(src='{{static_url("pages/question/js/answer-create.js")}}')   
+  script(type='text/x-mathjax-config').
+    MathJax.Hub.Config({
+     showProcessingMessages: false,
+     tex2jax: { inlineMath: [['$','$'],['\\\(','\\)']] },
+     TeX: { equationNumbers: {autoNumber: "AMS"} }
+    });
+  script(src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+
+
+
+block content
+  .row  
+    .col-md-12
+      .row
+        .col-md-9
+          h3 {{title}}
+
+      hr.tittle-delimeter      
+      
+      {% if 'answer' not in data %}
+      form
+        textarea#new-answer-editor(data-provide='markdown', rows='10')
+        br
+        a#answer-submit-button.btn.btn-success(data-qid="{{data['qid']}}") Submit Answer
+      {% else %}
+      form
+        textarea#new-answer-editor(data-provide='markdown', rows='10') {{data['answer'].description}}
+        br
+        a#answer-update-button.btn.btn-success(data-aid="{{data['answer'].aid}}", data-qid="{{data['answer'].qid}}") Update Answer
+      {% end %}

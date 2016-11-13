@@ -1,0 +1,4 @@
+*.pyc
+*~
+temp
+webservice/config/*.json

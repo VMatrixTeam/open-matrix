@@ -1,0 +1,32 @@
+doctype html
+html
+  head
+    title Matrix Community
+    link(rel='shortcut icon', type='image/png', href='{{static_url("favicon.ico")}}')
+    meta(charset="utf-8")
+    link(rel='stylesheet', href='{{static_url("base/css/bootstrap.min.css")}}')
+    link(rel='stylesheet', href='{{static_url("base/bootflat/css/bootflat.css")}}')
+    block css
+    
+  body
+    nav.navbar.navbar-inverse(role='navigation')
+      .container-fluid
+        .navbar-header
+          img(src='{{static_url("base/images/logo.png")}}', width='150px', height='50px')
+        p.navbar-text
+          | Matrix Community Alpha 0.1
+    
+    .container
+      block content
+                        
+    footer.matrix-community-footer
+      .container
+        .row
+          .col-md-12
+            center Copyright (c) 2016 Copyright Matrix Community All Rights Reserved.
+            br
+
+    script(src='{{static_url("base/js/jquery-1.10.1.min.js")}}')
+    script(src='{{static_url("base/js/bootstrap.min.js")}}')
+    
+    block js

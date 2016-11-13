@@ -1,0 +1,114 @@
+
+extend ../layouts/main.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/snippet/css/snippet-comment.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/simple-mde/simplemde.min.css")}}')
+  link(rel='stylesheet', href='{{static_url("base/css/github-markdown.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/highlight/styles/github.css")}}')
+block js
+  script.
+    $(document).ready(function() {
+      $(".preview-picture").click(function(event) {
+        $("#ImagePreviewer").modal("show");
+        $("#big-image").attr('src', $(event.target).attr('src'))
+      });
+    });
+    //- alert("本模块正在开发中！")
+  script(src='{{static_url("vender/marked.js")}}')
+  script(src='{{static_url("vender/simple-mde/simplemde.min.js")}}')
+  script(src='{{static_url("vender/highlight/highlight.pack.js")}}')   
+  script(src='{{static_url("vender/attachment/inline-attachment.js")}}')
+  script(src='{{static_url("vender/attachment/codemirror-4.inline-attachment.js")}}') 
+  script(src='{{static_url("pages/snippet/js/snippet-comment.js")}}')
+
+block content
+  | {% import utility.time %}
+  #ImagePreviewer.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='ImagePreviewer')
+    img#big-image(src='', alt='')
+
+  .row  
+    .col-md-12
+      //- .row
+      //-   .col-md-9
+      //-     h3 {{question.title}}
+      //-   {% if question.author.user_id != current_user.user_id%}
+      //-   .col-md-2
+      //-     a#answer-it-button.answer-button.btn.btn-info.btn-block(type='button', href='/question/answer/create/{{question.qid}}') Answer it
+      //-   {% end %}
+
+      //- hr.tittle-delimeter
+    
+      section.one-snippet
+        .snippet-header.row
+          .author-avatar.col-md-1
+            img.img-circle(src="/api/1.0/base/filesystem/avatar/{{ snippet.author.user_id }}", width="40px", height="40px")
+          .snippet-info.col-md-9
+            .author-name
+              a(href="/profile/{{ snippet.author.user_id }}") {{ snippet.author.nickname }}
+            .publish-time
+              | {{ utility.time.timebefore(snippet.createAt) }}
+        .snippet-body.row
+          .text-content
+            p {{ snippet.content }}
+          .pictures
+            {% for each in snippet.pictures %}
+            img.preview-picture(src="/api/1.0/base/filesystem/picture/snippet/{{ each }}")
+            {% end %}
+          .snippet-code
+            .snippet-code-markdown(style='display:none')
+              ```
+              {{ snippet.code }}
+              ```
+            {% if not snippet.code %}
+            .snippet-code-html.markdown-body(style='display:none')
+            {% else %}
+            .snippet-code-html.markdown-body
+            {% end %}
+            
+        .snippet-footer.row
+          .col-md-12
+            .snippet-praise.snippet-control.pull-left
+              a(href='javascript:void(0)')
+                {% if not snippet.is_praised %}
+                span.glyphicon.glyphicon-thumbs-up.praise-button(data-sid='{{ snippet.sid }}')
+                {% else %}
+                span.glyphicon.glyphicon-thumbs-up.praise-button(data-sid='{{ snippet.sid }}', class='praised')
+                {% end %}
+              | &nbsp
+              span.praise-count {{ len(snippet.praises) }}
+            .snippet-comment.snippet-control.pull-left
+              a(href='javascript:void(0)')
+                span.glyphicon.glyphicon-comment.comment-button(data-sid='{{ snippet.sid }}' href='/snippet/comment/{{snippet.sid}}')
+              | &nbsp
+              | {{ len(snippet.comments) }}
+
+      .row
+        .col-md-12
+          .snippet-editor
+            .snippet-editor-header
+              h6.pull-right You can still input&nbsp
+                sapn.words-num 148
+                | &nbspLetters
+            .snippet-editor-body
+              textarea#new-snippet-comment-editor.form-control(rows='4', cols='8')
+            .snippet-editor-footer
+              .snippet-editor-footer-left-control.pull-left
+              .snippet-editor-footer-right-control.pull-right
+                button#snippet-comment-post-button.btn.btn-success(type="button", data-sid='{{ snippet.sid }}') Comment
+
+      h6 Comments:
+      | {% for comment in snippet.comments %}
+      .snippet-comments-warpper
+        .snippet-one-comment
+          .row
+            .col-md-1.comment-author-avatar
+                img.img-circle(src="/api/1.0/base/filesystem/avatar/{{ comment.author.user_id }}", width="30px", height="30px")
+              .author
+            .snippet-info.col-md-9
+              .author-name
+                a(href="/profile/{{ comment.author.user_id }}") {{ comment.author.nickname }}
+                span &nbsp: {{ comment.content }}
+              .publish-time
+                | {{ utility.time.timebefore(comment.createAt) }}
+      {% end %}

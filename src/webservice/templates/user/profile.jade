@@ -1,0 +1,207 @@
+extend ../layouts/main.jade
+  
+block css
+  link(rel='stylesheet', href='{{static_url("pages/user/css/profile.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/cal-heatmap/cal-heatmap.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/boot-markdown/css/bootstrap-markdown.min.css")}}')
+
+block js
+  script(src='{{static_url("vender/d3.min.js")}}', charset='utf-8')
+  script(src='{{static_url("vender/cal-heatmap/cal-heatmap.min.js")}}')
+  script(src='{{static_url("vender/boot-markdown/js/bootstrap-markdown.js")}}')
+  script(src='{{static_url("pages/user/js/profile.js")}}')
+  script.
+    $("#new-answer-editor").markdown({
+      onPreview: function(e) {
+        var previewContent
+        var originalContent = e.getContent();
+        if (originalContent != "") {
+          previewContent = marked(originalContent);
+        } else {
+          previewContent = "Noting to preview...";
+        }
+        return previewContent;
+      },
+      footer: " Styling with Markdown is supported",
+    });
+
+block content
+  .row
+    .col-md-3
+      .profile-sidebar
+        // SIDEBAR USERPIC
+        .profile-userpic
+          img.img-circle(src='/api/1.0/base/filesystem/avatar/{{profile_user.user_id}}', alt='', width="200px", height="200px")
+        
+        .profile-usertitle
+          .profile-usertitle-nickname
+            | {{profile_user.nickname}} 
+            span.profile-usertitle-email
+              | ({{profile_user.realname}})
+            | &nbsp
+        
+        hr.profile-user-delimeter
+        
+        {% if profile_user.email %}
+        .profile-item.profile-user-email
+          span.glyphicon.glyphicon-envelope
+          &nbsp
+          a(href="mailto:{{profile_user.email}}")
+            {{profile_user.email}}
+        {% end %}
+        
+        {% if profile_user.homepage %}
+        .profile-item.profile-user-homepage
+          span.glyphicon.glyphicon-home
+          &nbsp
+          a(href="{{profile_user.homepage}}")
+            {{profile_user.homepage}}
+        {% end %}
+        
+        .profile-item.profile-user-jointime
+          span.glyphicon.glyphicon-time
+          &nbsp Joined at 
+          {{profile_user.create_at}}
+        
+        //- button.btn.btn-default(type="button") Follow
+        
+    .col-md-9
+      // Nav tabs
+      ul#profile-user-nav.nav.nav-tabs(role='tablist')
+        li.active
+          a(href='#profile-tab-overview', role='tab', data-toggle='tab') Overview
+        li
+          a(href='#profile-tab-qas', role='tab', data-toggle='tab') QAs
+        li
+          a(href='#profile-tab-blogs', role='tab', data-toggle='tab') Blogs
+        li
+          a(href='#profile-tab-snippets', role='tab', data-toggle='tab') Snippets
+        li
+          a(href='#profile-tab-messages', role='tab', data-toggle='tab') Messages
+      // Tab panes
+      .tab-content
+        #profile-tab-overview.tab-profile.tab-pane.active(role='tabpanel')
+          h2.profile-second-tittle Contribution Map
+          #cal-heatmap
+          h2.profile-second-tittle Contribution Activity Timeline
+          .row
+            .col-md-12
+              .timeline
+                dl
+                  | {% for index, record in enumerate(records) %}
+                  | {% if record.has_key('month') %}
+                  dt {{ record['month'] }}
+                  | {% end %}
+
+                  dd(class='{{"pos-right" if index % 2 == 0 else "pos-left" }}').clearfix
+                    .circ
+                    .time {{ record['date'] }}
+                    .events
+                      .events-body
+                        | {% if record['status'] == "first" %}
+                        h4.events-heading First {{ record['category'] }}
+                        p You publish your first {{ record['category'] }} in the Commnunity. Enjoy!
+                        | {% else %}
+                        h4.events-heading New {{ record['category'] }}
+                        p Published a new {{ record['category'] }} 
+                        | {% end %}
+                  | {% end %}
+
+        #profile-tab-qas.tab-profile.tab-pane(role='tabpanel')
+          h2.profile-second-tittle Statistic
+          .row.question-statistic
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Answers
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Questions
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Votes
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Reputaion
+          h2.profile-second-tittle Popular Questions
+          hr
+          section.one-question
+            .row
+              .col-md-5
+                a(href='/question/detail/1')
+                  | Question1
+                &nbsp
+                a.label.label-primary(href='javascript:void(0)') c++
+              .col-md-3
+                | 0 votes 0 answers
+              .col-md-4
+                | asked 
+                span.time 10 mins ago
+          hr
+          section.one-question
+            .row
+              .col-md-5
+                a(href='/question/detail/1')
+                  | Question1
+                &nbsp
+                a.label.label-primary(href='javascript:void(0)') c++
+              .col-md-3
+                | 0 votes 0 answers
+              .col-md-4
+                | asked 
+                span.time 10 mins ago
+          hr
+          
+          h2.profile-second-tittle Popular Answers
+          hr
+          section.one-question
+            .row
+              .col-md-5
+                a(href='/question/detail/1')
+                  | #256 for Question1
+              .col-md-3
+                | 0 votes
+              .col-md-4
+                | answered 
+                span.time 10 mins ago
+          hr  
+        
+        #profile-tab-blogs.tab-profile.tab-pane(role='tabpanel') Under Construction
+        #profile-tab-snippets.tab-profile.tab-pane(role='tabpanel') Under Construction
+        #profile-tab-messages.tab-profile.tab-pane(role='tabpanel')
+          h2.profile-second-tittle Messages
+          .one-post
+            .row.user-block
+              .col-md-1
+                img.img-circle.img-bordered-sm(src='/api/1.0/base/filesystem/avatar/{{profile_user.user_id}}', alt='user image', width="40px", height="40px")
+              .col-md-6
+                span.username
+                  a(href='#') Jonathan Burke Jr.
+                  a.pull-right.btn-box-tool(href='#')
+                    i.fa.fa-times
+                br
+                span.description Commented - 7:30 PM today
+            // /.user-block
+            p
+              | Lorem ipsum represents a long-held tradition for designers,
+              | typographers and the like. Some people hate it and argue for
+              | its demise, but others ignore the hate as they create awesome
+              | tools to help create filler text for everyone from bacon lovers
+              | to Charlie Sheen fans.
+          hr
+          h2.profile-second-tittle Leave a message
+          .row
+            .col-md-1
+              a(href="/profile/{{current_user.user_id}}")
+                img.author-avatar.img-circle(src="/api/1.0/base/filesystem/avatar/{{current_user.user_id}}", width="40px", height="40px")
+            .col-md-11
+              textarea#new-answer-editor(data-provide='markdown', rows='10')
+              br
+              button#new-answer-submit-button.btn.btn-success(type="button") Comment

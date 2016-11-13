@@ -1,0 +1,70 @@
+
+.tittle-delimeter {
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+
+.question-nav {
+  width: 100%;
+  border-bottom: solid 1px #ddd;
+  background-color: white !important;
+  display: table;
+  margin-bottom: 20px;
+}
+
+.question-nav li {
+  background-color: inherit !important;
+  border: none !important;
+  display: table-cell;
+  padding-right: 20px;
+  padding-left: 20px;
+  font-size: 14px;
+  vertical-align: middle;
+  border-bottom: 2px solid transparent;
+}
+
+.question-nav li a:hover {
+  background-color: white;
+  color: black;
+}
+
+.question-nav li a:visited {
+  background-color: white;
+  color: black;
+}
+
+.question-nav .active {
+  border-bottom: 2px solid !important;
+  border-bottom-color: #3bafda !important;
+}
+
+.question-nav li.active {
+  margin-bottom: -1px;
+}
+
+.one-question {
+  height: 65px;
+  margin: 10px;
+  padding: 5px;
+}
+
+.question-votes, .question-answers{
+  width: 10%;
+  text-align: center;
+  font-size: 12pt;
+  line-height: 22px;
+  /*border: 1px solid;*/
+  padding: 5px;
+}
+
+.question-answers {
+  margin-left: 5px;
+}
+
+.question-body {
+  width: 77%;
+  padding: 5px;
+  margin-left: 10px;
+  height: 56px;
+  /*border: 1px solid;*/
+}

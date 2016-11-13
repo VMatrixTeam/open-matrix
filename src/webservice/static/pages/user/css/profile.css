@@ -1,0 +1,93 @@
+
+.profile-sidebar {
+  margin-top: 25px;
+}
+
+.profile-sidebar .profile-usertitle {
+  margin-top: 10px;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+.profile-sidebar .profile-usertitle .profile-usertitle-nickname {
+  color: black;
+}
+
+.profile-sidebar .profile-usertitle .profile-usertitle-email {
+  color: #666666;
+}
+
+.profile-user-delimeter {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.profile-item {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+#profile-user-nav {
+  margin-top: 25px;
+  border-bottom: solid 1px #ddd;
+  background-color: white !important;
+  display: table;
+  width: 85%;
+}
+
+#profile-user-nav li {
+  background-color: inherit !important;
+  border: none !important;
+  display: table-cell;
+  padding-right: 20px;
+  padding-left: 20px;
+  font-size: 14px;
+  color: #767676;
+  vertical-align: middle;
+  border-bottom: 2px solid transparent;
+}
+
+#profile-user-nav li a {
+  font-size: 14px !important;
+}
+
+#profile-user-nav .active {
+  border-bottom: 2px solid !important;
+  border-bottom-color: #48b4dc !important;
+}
+
+#profile-user-nav li a:hover {
+  background-color: white;
+  color: black;
+}
+
+.question-statistic {
+  color: #999FA5;
+  font-size: 13px;
+  text-align: center;
+}
+
+.question-statistic .number {
+  color: black;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.profile-second-tittle {
+  font-size: 16px;
+  margin-top: 15px;
+  font-weight: normal;
+}
+
+.tab-profile {
+  width: 85%;
+}
+
+#profile-tab-messages .user-block {
+  margin-bottom: 15px;
+}
+
+#profile-tab-messages .user-block .description {
+  color: #999;
+  font-size: 13px;
+}

@@ -1,0 +1,114 @@
+extend ../layouts/main.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/blog/css/index.css")}}')
+
+block js
+  script(src='{{static_url("base/pagination/jquery.twbsPagination.min.js")}}')
+  script.
+
+    $('#pagination-demo').twbsPagination({
+      totalPages: {{page_count}},
+      visiblePages: 7,
+      startPage: {{page_current}},
+      onPageClick: function (event, page) {
+        if(page == {{page_current}}) {
+          console.log({{page_current}});
+          return false;
+        } else {
+          var params = window.location.search;
+          params = params.substring(1, params.length).split("&");
+          var hasPagePar = false;
+          for (var i = 0; i < params.length; i++) {
+            if(params[i] == "") {
+              params.splice(i, 1);
+              continue;
+            }
+            if(params[i].indexOf('page=') != -1) {
+              params[i] = "page=" + page;
+              hasPagePar = true;
+              break;
+            }
+          }
+          console.log(params);
+          if(!hasPagePar) {
+            params.push("page=" + page);
+          }
+          window.location.search = "?" + params.join('&');
+        }
+      }
+    });
+
+block content
+  .row
+    .col-md-12
+      .row
+        .col-md-9
+          h3(style='margin-bottom:15px;') Blog
+      hr.tittle-delimeter
+
+      .row
+        .col-md-8
+          | {% for blog in blogs %}
+          section.one-blog
+            .row
+              .col-md-2.blog-author-profile.blog-header.text-center
+                img.img-circle(src="/api/1.0/base/filesystem/avatar/{{blog.author.user_id}}", width='60px', height='60px')
+                .author-name
+                  a(href="/profile/{{blog.author.user_id}}") {{blog.author.nickname}}
+              .col-md-10.blog-body
+                .blog-title
+                  a(href="/blog/detail/{{blog.bid}}")
+                    h5 {{blog.title}}
+                .blog-description
+                  | {{blog.brief}}
+                .blog-info
+                  span.glyphicon.glyphicon-eye-open
+                  | &nbsp {{blog.reads}}
+                  &nbsp
+                  span.glyphicon.glyphicon-comment
+                  | &nbsp {{blog.comments}}
+                  &nbsp
+                  span.glyphicon.glyphicon-thumbs-up
+                  | &nbsp {{blog.praises}}
+                  .pull-right
+                    span.glyphicon.glyphicon-time
+                    | {% import utility.time %}
+                    | {% if blog.createAt == blog.updateAt %}
+                    | created {{utility.time.timebefore(blog.updateAt)}}
+                    | {% else %}
+                    | updated {{utility.time.timebefore(blog.updateAt)}}
+                    | {% end %}
+          hr
+          | {% end %}
+          .text-center
+            ul#pagination-demo.pagination-sm.pagination.text-info
+
+        .col-md-3.side-memnu
+          h5 My Blog
+          a.btn.btn-primary.btn-md.btn-block(type="button", width="100%", href="javascript:void(0)")
+            span.glyphicon.glyphicon-pencil
+            | &nbsp
+            | Write a blog
+          a.btn.btn-success.btn-md.btn-block(type="button", width="100%", href="javascript:void(0)")
+            span.glyphicon.glyphicon-book
+            | &nbsp
+            | My Blogs
+          h5 Hot Tags
+          .catologs
+            a.label.label-primary(href='javascript:void(0)') experience
+            | &nbsp
+            a.label.label-primary(href='javascript:void(0)') notes
+            | &nbsp
+            a.label.label-primary(href='javascript:void(0)') design
+            | &nbsp
+            a.label.label-primary(href='javascript:void(0)') project
+            | &nbsp
+            a.label.label-primary(href='javascript:void(0)') tutorial
+          br
+          h5 Weekly Best Blogers
+          .text-left.best-blogers
+            img.img-circle(src="/api/1.0/base/filesystem/avatar/302", width="60px", height="60px")
+            img.img-circle(src="/api/1.0/base/filesystem/avatar/316", width="60px", height="60px")
+            img.img-circle(src="/api/1.0/base/filesystem/avatar/2", width="60px", height="60px")
+            img.img-circle(src="/api/1.0/base/filesystem/avatar/3", width="60px", height="60px")

@@ -1,0 +1,72 @@
+
+.one-snippet {
+  margin-right: 15px;
+}
+
+.one-snippet .snippet-body {
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-bottom: 15px;
+}
+
+.one-snippet .pictures img {
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+}
+
+.one-snippet .snippet-code {
+}
+
+.one-snippet .preview-picture {
+  cursor: pointer; cursor: zoom-in;
+}
+
+#big-image {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.one-snippet .snippet-control {
+  margin-right: 10px;
+}
+
+.one-snippet .snippet-control a {
+  color: #8c8c8c;
+  cursor: default;
+}
+
+.one-snippet .snippet-control a:hover {
+  color: black;
+}
+
+.one-snippet .snippet-control .praise-button, .one-snippet .snippet-control .comment-button {
+  cursor: pointer;
+}
+
+.one-snippet .snippet-control .praise-button.praised {
+  color: black;
+  cursor: default;
+  pointer-events: none;
+}
+
+.snippet-editor .snippet-editor-footer {
+  margin-top: 10px;
+}
+
+.snippet-comments-warpper {
+  margin-top: 15px;
+  margin-left: 50px;
+}
+
+.snippet-comments-warpper .snippet-one-comment  .comment-author-avatar {
+  padding-right: 0;
+}
+
+.snippet-comments-warpper .snippet-one-comment .comment-body {
+  padding-left: 5px;
+}

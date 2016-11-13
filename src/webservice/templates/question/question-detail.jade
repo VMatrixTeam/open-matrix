@@ -1,0 +1,248 @@
+
+extend ../layouts/main.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/question/css/detail.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/simple-mde/simplemde.min.css")}}')
+  link(rel='stylesheet', href='{{static_url("base/css/github-markdown.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/highlight/styles/github.css")}}')
+  style.
+    .CodeMirror, .CodeMirror-scroll {
+        min-height: 150px;
+    }
+
+    .CodeMirror {
+        height: 150px;
+    }
+
+block js
+  script(src='{{static_url("vender/marked.js")}}')
+  script(src='{{static_url("vender/simple-mde/simplemde.min.js")}}')
+  script(src='{{static_url("vender/highlight/highlight.pack.js")}}')   
+  script(src='{{static_url("vender/attachment/inline-attachment.js")}}')
+  script(src='{{static_url("vender/attachment/codemirror-4.inline-attachment.js")}}') 
+  script(src='{{static_url("pages/question/js/question-detail.js")}}')
+  script(type='text/x-mathjax-config').
+    MathJax.Hub.Config({
+     showProcessingMessages: false,
+     tex2jax: { inlineMath: [['$','$'],['\\\(','\\)']] },
+     TeX: { equationNumbers: {autoNumber: "AMS"} }
+    });
+  script(src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+  
+block content
+  | {% import markdown %}
+  | {% from utility.time import timebefore %}
+  .row  
+    .col-md-12
+      .row
+        .col-md-9
+          h3 {{question.title}}
+        {% if question.author.user_id != current_user.user_id%}
+        .col-md-2
+          a#answer-it-button.answer-button.btn.btn-info.btn-block(type='button', href='/question/answer/create/{{question.qid}}') Answer it
+        {% end %}
+
+      hr.tittle-delimeter
+    
+      section.question-detial(data-qid='{{question.qid}}')
+        .row
+          .col-md-1.text-center
+            a(href='/profile/{{question.author.user_id}}')
+              img.author-avatar.img-circle(src="/api/1.0/base/filesystem/avatar/{{question.author.user_id}}", width="60px", height="60px")
+          .col-md-9
+            .row
+              .col-md-12
+                .question-description
+                  .question-description-markdown(style='display:none')
+                    {{question.description}}
+                  .question-description-html.markdown-body
+            .row
+              .col-md-12
+                .tags.pull-left
+                  |{% for tag in question.tags %}
+                  a.label.label-primary(href='javascript:void(0)') {{ tag.tag }}
+                  | &nbsp
+                  {% end %}
+                .pull-right.time
+                  span.author-name
+                  a(href='/profile/{{question.author.user_id}}')
+                    | {{question.author.nickname}} 
+                  {% if question.createAt == question.updateAt%}
+                  | created at {{timebefore(question.createAt)}}
+                  {% else %}
+                  | updated at {{timebefore(question.updateAt)}}
+                  {% end %}
+            br
+            .row
+              .col-md-12
+                | {% if len(question.comments) != 0%}
+                hr.description-commnet-delimeter
+                | {% end %}
+                .comments
+                  .comment-main
+                    {% for comment in question.comments %}
+                    .one-comment(data-cid="{{comment.cid}}")
+                      span.content
+                        | {{comment.description}} 
+                      | –– 
+                      a.user(href='/profile/{{comment.author.user_id}}')
+                        | {{comment.author.nickname}}
+                      | created at {{timebefore(comment.createAt)}}
+                      | &nbsp
+                      | {% if comment.author.user_id == current_user.user_id %}
+                      a.comment-remove-button(href='javascript:void(0)')
+                        span.glyphicon.glyphicon-remove(style='color:red;')
+                      | {% end %}
+                    hr.description-commnet-delimeter
+                    {% end %}
+
+                  a.comment-button(href='javascript:void(0)') add a comment
+            
+                  .comment-form(style="display:none;margin-top:10px;")
+                    .row
+                      .col-md-10
+                        input.form-control(type='text', placeholder='Write Your Comment Here') 
+                      .col-md-2
+                        a.comment-save-button.btn.btn-success(data-type='question', data-qaid='{{question.qid}}') Comment
+                        
+          | {% set voted = False %}
+          | {% for vote in question.votes %} 
+          | {% if vote.voter == current_user.user_id %}
+          | {% set voted = True %}
+          | {% end %} {% end %}
+          .col-md-1.question-vote.text-center
+            {% if question.author.user_id != current_user.user_id%}
+            {% if not voted %}
+            a.vote-up-button(href="javascript:void(0)", data-type="question", data-qaid="{{question.qid}}")
+              span.glyphicon.glyphicon-chevron-up(data-type="question", data-qaid="{{question.qid}}")
+            {% else %}
+            span.glyphicon.glyphicon-chevron-up(data-type="question", data-qaid="{{question.qid}}")
+            {% end %}
+            .clear
+            span.question-votes {{sum(1 if vote.value else -1 for vote in question.votes )}}
+            .clear
+            {% if not voted %}
+            a.vote-down-button(href="javascript:void(0)", data-type="question", data-qaid="{{question.qid}}")
+              span.glyphicon.glyphicon-chevron-down(data-type="question", data-qaid="{{question.qid}}")
+            {% else %}
+            span.glyphicon.glyphicon-chevron-down(data-type="question", data-qaid="{{question.qid}}")
+            {% end %}
+            {% else %}
+            a.question-edit-button(href='/question/edit/{{question.qid}}',title="edit")
+              span.glyphicon.glyphicon-pencil
+            | &nbsp &nbsp
+            a.question-remove-button(href='javascript:void(0)', title="delete")
+              span.glyphicon.glyphicon-remove(style='color:red;')
+            br
+            {% end %}
+      
+      br
+      
+      h4 {{len(answers)}} answers 
+      
+      hr
+      
+      | {% for answer in answers %}
+      section.question-detial.one-answer(data-aid="{{answer.aid}}")
+        .row
+          .col-md-1.text-center
+            a(href="/profile/{{answer.author.user_id}}")
+              img.author-avatar.img-circle(src="/api/1.0/base/filesystem/avatar/{{answer.author.user_id}}", width="60px", height="60px")
+              
+          .col-md-9
+            .row
+              .col-md-12
+                .question-description
+                  .question-description-markdown(style='display:none')
+                    {{answer.description}}
+                  .question-description-html.markdown-body
+            .row
+              .col-md-12
+                .pull-right.time
+                  span.author-name
+                  a(href="/profile/{{answer.author.user_id}}")
+                    | {{answer.author.nickname}}
+                  {% if answer.createAt == answer.updateAt%}
+                  | created at {{timebefore(answer.createAt)}}
+                  {% else %}
+                  | updated at {{timebefore(answer.updateAt)}}
+                  {% end %}
+            br
+            .row
+              .col-md-12
+                | {% if len(answer.comments) != 0%}
+                hr.description-commnet-delimeter
+                | {% end %}
+                .comments
+                  .comment-main
+                    {% for comment in answer.comments %}
+                    .one-comment(data-cid='{{comment.cid}}')
+                      span.content
+                        | {{comment.description}}
+                      | –– 
+                      a.user(href="/profile/{{comment.author.user_id}}")
+                        | {{comment.author.nickname}}
+                      | created at {{timebefore(comment.createAt)}}
+                      | {% if comment.author.user_id == current_user.user_id %}
+                      a.comment-remove-button(href='javascript:void(0)')
+                        span.glyphicon.glyphicon-remove(style='color:red;')
+                      | {% end %}
+                    hr.description-commnet-delimeter
+                    {% end %}
+                  a.comment-button(href='javascript:void(0)') add a comment
+            
+                  .comment-form(style="display:none;margin-top:10px;")
+                    .row
+                      .col-md-10
+                        input.form-control(type='text', placeholder='Write Your Comment Here') 
+                      .col-md-2
+                        a.comment-save-button.btn.btn-success(data-type='answer', data-qaid='{{answer.aid}}') Comment
+                        
+          .col-md-1.question-vote.text-center
+            {% if answer.author.user_id != current_user.user_id%}
+            | {% set voted = False %}
+            | {% for vote in answer.votes %} 
+            | {% if vote.voter == current_user.user_id %}
+            | {% set voted = True %}
+            | {% end %} {% end %}
+            {% if not voted %}
+            a.vote-up-button(href="javascript:void(0)", data-type="answer", data-qaid="{{answer.aid}}")
+              span.glyphicon.glyphicon-chevron-up(data-type="answer", data-qaid="{{answer.aid}}")
+            {% else %}
+            span.glyphicon.glyphicon-chevron-up(data-type="answer", data-qaid="{{answer.aid}}")
+            {% end %}
+            .clear
+            span.question-votes {{sum(1 if vote.value else -1 for vote in answer.votes)}}
+            .clear
+            {% if not voted %}
+            a.vote-down-button(href="javascript:void(0)", data-type="answer", data-qaid="{{answer.aid}}")
+              span.glyphicon.glyphicon-chevron-down(data-type="answer", data-qaid="{{answer.aid}}")
+            {% else %}
+            span.glyphicon.glyphicon-chevron-down(data-type="answer", data-qaid="{{answer.aid}}")
+            {% end %}
+            {% else %}
+            a.answer-edit-button(href='javascript:void(0)',title="edit")
+              span.glyphicon.glyphicon-pencil
+            | &nbsp &nbsp
+            a.answer-remove-button(href='javascript:void(0)', title="delete")
+              span.glyphicon.glyphicon-remove(style='color:red;')
+            br
+            {% end %}
+      hr
+      | {% end %}
+      br
+      
+      {% if question.author.user_id != current_user.user_id%}
+      h4 Quick Answer
+      .row
+        .col-md-1
+          a(href="/profile/{{current_user.user_id}}")
+            img.author-avatar.img-circle(src="/api/1.0/base/filesystem/avatar/{{current_user.user_id}}", width="60px", height="60px")
+        .col-md-10
+          textarea#new-answer-editor
+          br
+          button#new-answer-submit-button.btn.btn-success(type="button", data-question='{{question.qid}}') Submit Your Answer
+      {% end %}
+  // templates
+  include ./question-comment.jade

@@ -1,0 +1,14 @@
+.matrix-community-rank {
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 15pt;
+}
+
+.matrix-community-rank > li {
+  margin-bottom: 10px;
+  color: #999;
+}
+
+.matrix-community-rank > li > .score {
+  color: #666;
+}

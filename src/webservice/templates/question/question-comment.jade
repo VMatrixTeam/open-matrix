@@ -1,0 +1,14 @@
+
+.template-comment(style='display:none')
+  .one-comment
+    span.content
+      | comment content
+    | –– 
+    a.user(href='javascript:void(0)') {{current_user.nickname}} 
+    | created 
+    span.time
+      | just now
+    | &nbsp
+    a.comment-remove-button(href='javascript:void(0)')
+      span.glyphicon.glyphicon-remove(style='color:red;')
+  hr.description-commnet-delimeter

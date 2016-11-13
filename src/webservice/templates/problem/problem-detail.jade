@@ -1,0 +1,145 @@
+extend ../layouts/main.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/blog/css/detail.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/simple-mde/simplemde.min.css")}}')
+  link(rel='stylesheet', href='{{static_url("base/css/github-markdown.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/highlight/styles/github.css")}}')
+  style.
+    .CodeMirror, .CodeMirror-scroll {
+        min-height: 150px;
+    }
+
+    .CodeMirror {
+        height: 150px;
+    }
+
+block js
+  script(src='{{static_url("vender/marked.js")}}')
+  script(src='{{static_url("vender/simple-mde/simplemde.min.js")}}')
+  script(src='{{static_url("vender/highlight/highlight.pack.js")}}')    
+  script(type='text/x-mathjax-config').
+    MathJax.Hub.Config({
+     showProcessingMessages: false,
+     tex2jax: { inlineMath: [['$','$'],['\\\(','\\)']] },
+     TeX: { equationNumbers: {autoNumber: "AMS"} }
+    });
+  script(type='text/javascript', src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+  
+  script(src="{{static_url('pages/blog/js/detail.js')}}")
+
+
+block content
+
+  .container
+    .page-header
+      .row
+        .col-md-4
+          h2(style="margin-top:0px;") Simple List
+        .col-md-5.col-md-offset-3
+          a.btn.btn-default(href='#', role='button') Submit
+          | &nbsp
+          a.btn.btn-default(href='#', role='button') Discuss
+          | &nbsp
+          a.btn.btn-default(href='#', role='button', disabled="disabled") Educational Solution
+    .container
+      .row
+        .col-md-8
+          .question-description
+            h2#introduction Introduction
+            p
+            | Knowledge points: (copy) constructor, deep copy, pointers, dynamic allocation, linked list algorithms, debug methods(GDB or IDE or output debug), memory leak.
+            p
+            | In this Lab, you are going to implement a class named list which is a simple version for the list in stl. You are going to use dynamic memory allocation and pointer operations to finish this project.
+            p I recommend you to:
+            ol(style='list-style-type: decimal;')
+            li Learn the knowledge points mentioned above.
+            li
+              | Use local compilers to test you program rather than submit your answer to the system time after time.
+            li
+              | Use local debug tools(GDB is recommended) to debug your code, especially for the memory leak problem. I can tell you that you will meet runtime error problem if you don't use local debug tools.
+            li
+              | Make use of your paper and pen to have some sketches because it's a good way when you meet list.
+            h2  
+            h2#requirements Requirements:
+            p Finish all the functions which have been declared inside the hpp file.
+            p Details:
+            p  
+            p
+            code string toString(void) const
+            p
+            | Return a visible list using '->' to show the linked relation which is a string like:
+            p 1->2->3->4->5->NULL
+            p  
+            p
+            code void insert(int position, const int& data)
+            p Add an element at the given position:
+            p example0:
+            p 1->3->4->5->NULL
+            p instert(1, 2);
+            p 1->2->3->4->5->NULL
+            p example1:
+            p NULL
+            p insert(0, 1)
+            p 1->NULL
+            p  
+            p
+            code void list::erase(int position)
+            p Erase the element at the given position
+            p 1->2->3->4->5->NULL
+            p erase(0)
+            p 2->3->4->5->NULL
+            h2  
+            h2#more More
+            p Happy coding...
+            p
+            a(href='https://github.com/wujr5/c-and-cpp-language-learning/issues/46')  
+
+          .question-tags
+            span.label.label-default data structure
+            | &nbsp
+            span.label.label-primary memory leak
+            | &nbsp
+            span.label.label-success encapsulation
+          hr
+            
+          .question-configs
+            h3 Configs
+            .row
+              .col-md-6
+                h4 general:
+                ul
+                  li plagrism check: on
+                  li compiler: gnu-c/c++-compile-4.4
+                  li style check tool: Google-cpplint.py
+                  li memory check tool: Valgrind
+                h4 limits:
+                ul
+                  li language limit: c,c++
+                  li time limit: 1000ms
+                  li memory limit: 32 MB
+                  li submission limit: 999
+              .col-md-6
+                h4 grading schema:
+                ul
+                  li compile check: 0pts
+                  li style check: 10pts
+                  li standar tests: 20pts
+                  li random tests: 50pts
+                  li memory check: 20pts
+                h4 files:
+                ul
+                  li list.hpp: support code
+                  li main.cpp: support code
+                  li list.cpp: your answer
+          hr
+          
+          .question-support
+            h3 Support
+            p support code download:
+            a(href="#") list_support_code.rar
+          hr
+          
+          .question-submit
+            h3 Submit
+            

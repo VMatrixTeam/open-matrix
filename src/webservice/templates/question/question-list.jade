@@ -1,0 +1,168 @@
+
+extend ../layouts/main.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/question/css/list.css")}}')
+  link(rel='stylesheet', href='{{static_url("pages/question/css/rank.css")}}')
+
+block js
+  script(src='{{static_url("base/pagination/jquery.twbsPagination.min.js")}}')
+
+  script(src='{{static_url("vender/countUp.js")}}')
+
+  script.
+    $('#pagination-demo').twbsPagination({
+      totalPages: {{page_count}},
+      visiblePages: 7,
+      startPage: {{page_current}},
+      onPageClick: function (event, page) {
+        if(page == {{page_current}}) {
+          console.log({{page_current}});
+          return false;
+        } else {
+          var params = window.location.search;
+          params = params.substring(1, params.length).split("&");
+          var hasPagePar = false;
+          for (var i = 0; i < params.length; i++) {
+            if(params[i] == "") {
+              params.splice(i, 1);
+              continue;
+            }
+            if(params[i].indexOf('page=') != -1) {
+              params[i] = "page=" + page;
+              hasPagePar = true;
+              break;
+            }
+          }
+          console.log(params);
+          if(!hasPagePar) {
+            params.push("page=" + page);
+          }
+          window.location.search = "?" + params.join('&');
+        }
+      }
+    });
+
+    $(document).ready(function() {
+      var score = "{{my_score}}";
+      if(location.search == "") {
+        var options = {
+          useEasing : true,
+          useGrouping : true,
+          separator : ',',
+          decimal : '.',
+          prefix : '',
+          suffix : ''
+        };
+
+        score == "None" ? score = 0 : score = parseInt(score);
+        console.log(score);
+        var score_count = new CountUp("my-score", 0, score, 0, 2.5, options);
+        score_count.start();
+      } else {
+        $("#my-score").text(score);
+      }
+    });
+
+
+block content
+  .row
+    .col-md-12
+      .row
+        .col-md-9
+          h3 {{title}}
+        .col-md-3
+          .form-search.search-only.question-search
+            i.search-icon.glyphicon.glyphicon-search
+            input.form-control.search-query(type='text', placeholder="Search for questions")
+
+      //- hr.tittle-delimeter
+
+      .row
+        .col-md-9
+          // Nav tabs
+          ul.question-nav.nav.nav-tabs
+            li(class='{{ "active" if tab not in ["hotest", "zero-answer"] else ""}}')
+              a(href='/question') Newest
+            li(class='{{ "active" if tab == "hotest" else ""}}')
+              a(href='/question?tab=hotest') Hotest
+            li(class='{{ "active" if tab == "zero-answer" else ""}}')
+              a(href='/question?tab=zero-answer') Zero-Answer
+
+          | {% for question in questions%}
+          | {% import utility.time %}
+          section.one-question
+            .pull-left.question-votes
+              | {{question.votes}}
+              .small
+                | Votes
+            .pull-left.question-answers
+              | {{len(question.answers)}}
+              .small
+                | Answers
+            .pull-left.question-body
+              .question-tittle
+                a(href='/question/detail/{{question.qid}}')
+                  | {{question.title}}
+              .tag-info.pull-left
+                |{% for tag in question.tags %}
+                a.label.label-primary(href='javascript:void(0)') {{ tag.tag }}
+                | &nbsp
+                {% end %}
+              .author-info.pull-right
+                img.img-circle(src='/api/1.0/base/filesystem/avatar/{{question.author.user_id}}', width='20px', height='20px')
+                | &nbsp
+                span.author
+                  a(href='/profile/{{question.author.user_id}}') {{question.author.nickname}} 
+                | asked
+                span.time {{ utility.time.timebefore(question.createAt) }}
+
+          hr
+          | {% end %}
+
+          .text-center
+            ul#pagination-demo.pagination-sm.pagination.text-info
+
+        .col-md-3
+          .modal.fade#ScoreHelper
+            .modal-dialog
+              .modal-content
+                .modal-header
+                  button.close(type='button', data-dismiss='modal')
+                    span(aria-hidden='true') ×
+                    span.sr-only Close
+                  h4.modal-title Socre Rules
+                .modal-body
+                  ul
+                    li ask a question + 50 * random(0.5, 1.5)
+                    li answer a question + 20 * random(0.5, 1.5)
+                    li get good vote + 50 * random(0.5, 1.5)
+                    li delete a question - 50 * random(0.5, 1.5)
+                    li delete an answer - 20 * random(0.5, 1.5)
+                    li get bad vote - 50 * random(0.5, 1.5)
+                    li delete a comment - 10 * random(0.5, 1.5)
+                .modal-footer
+                  button.btn.btn-default(type='button', data-dismiss='modal') Close
+
+          .my-score
+            h4 My Score:
+              .pull-right
+                a(href='javascript:void(0)',data-toggle="modal", data-target="#ScoreHelper")
+                  span.glyphicon.glyphicon-question-sign
+            .text-center
+              h3#my-score(style="font-size:4em;font-weight:100;") 1024
+
+          .control-buttons
+            a.btn.btn-primary.btn-block(href='/question/create') Ask A Question
+            a.btn.btn-success.btn-block(href='/question/user/{{current_user.user_id}}') My Questions
+
+          br
+          h4 Rank List
+          ol.matrix-community-rank
+            {% for each in rank %}
+            li
+              img.img-circle(src="/api/1.0/base/filesystem/avatar/{{each['user'].user_id}}", width="20px", height="20px")
+              | &nbsp
+              a(href="/profile/{{each['user'].user_id}}") {{each['user'].nickname}}
+              span.pull-right.score {{each['score']}}
+            {% end %}

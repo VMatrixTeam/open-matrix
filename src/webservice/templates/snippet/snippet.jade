@@ -1,0 +1,113 @@
+extend ../layouts/main.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/snippet/css/list.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/simple-mde/simplemde.min.css")}}')
+  link(rel='stylesheet', href='{{static_url("base/css/github-markdown.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/highlight/styles/github.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/codemirror/codemirror.css")}}')
+
+block js
+  script.
+    $(document).ready(function() {
+      $('#add-code-button').click(function() {
+        $('.code-editor-wrapper').toggle();
+        //- $('#code-editor').toggle();
+      });
+    });
+    //- alert("本模块正在开发中！")
+  script(src='{{static_url("vender/marked.js")}}')
+  script(src='{{static_url("vender/simple-mde/simplemde.min.js")}}')
+  script(src='{{static_url("vender/highlight/highlight.pack.js")}}')   
+  script(src='{{static_url("vender/attachment/inline-attachment.js")}}')
+  script(src='{{static_url("vender/attachment/codemirror-4.inline-attachment.js")}}') 
+  script(src='{{static_url("vender/codemirror/codemirror.js")}}')
+  script(src='{{static_url("pages/snippet/js/snippet.js")}}')
+
+
+block content
+  #ImagePreviewer.modal.fade.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='ImagePreviewer')
+    img#big-image(src='', alt='')
+
+  .row
+    .col-md-12
+      .row
+        .col-md-9
+          h3(style='margin-bottom:15px;') Snippet
+      hr.tittle-delimeter
+      .row
+        .col-md-8
+          .row
+            .col-md-12
+              form.snippet-editor(id='snippet-form', method='post', action='/api/1.0/snippet/snippet', enctype="multipart/form-data")
+                .snippet-editor-header
+                  h5.pull-left.snippet-slogan Share a small idea with every body
+                  h6.pull-right You can still input&nbsp
+                    sapn.words-num 148
+                    | &nbspLetters
+                .snippet-editor-body
+                  textarea#new-snippet-editor.form-control(rows='4', cols='8', name='content')
+                  textarea#code-area(type='text', name='code', style='display:none')
+                .snippet-editor-footer
+                  .snippet-editor-footer-left-control.pull-left
+                    .addon.picture-addon.pull-left
+                      span.glyphicon.glyphicon-picture
+                      &nbsp
+                      a(href='javascript:void(0)')
+                        label(for='image') add-pictures
+                      input(type='file', name='images', id='image', multiple, onchange="previewFile(this)")
+                    .addon.code-addon.pull-left
+                      span.glyphicon.glyphicon-file
+                      &nbsp
+                      a(href='javascript:void(0)' id='add-code-button')
+                        | add-code
+
+                  .snippet-editor-footer-right-control.pull-right
+                    button#snippet-post-button.btn.btn-success(type="button") Post Snippet
+                #upload-image-list
+                .code-editor-wrapper
+                  //- textarea#code-editor.form-control(rows='4', cols='8', name='code')
+                  #code-editor
+
+
+          #snippets-container
+            include ./snippets.jade
+                    
+          hr.tittle-delimeter
+          
+          a#read-more(href="javascript:void(0)", data-page='2') read more...
+          
+        .col-md-3
+          h5 Top {{ len(top_snippets) }} Snippets
+          
+          | {% for snippet in top_snippets %}
+          | {% import utility.time %}
+          section.one-snippet
+            .snippet-header.row
+              .author-avatar.col-md-2
+                img.img-circle(src="/api/1.0/base/filesystem/avatar/{{ snippet.author.user_id }}", width="40px", height="40px")
+              .snippet-info.col-md-8
+                .author-name
+                  a(href="/profile/{{ snippet.author.user_id }}") {{ snippet.author.nickname }}
+                .publish-time
+                  | {{ utility.time.timebefore(snippet.createAt) }}
+            .snippet-body.row
+              p {{ snippet.content }}
+            .snippet-footer.row
+              .col-md-12
+                .snippet-praise.snippet-control.pull-left
+                  a(href='javascript:void(0)')
+                    {% if not snippet.is_praised %}
+                    span.glyphicon.glyphicon-thumbs-up.praise-button(data-sid='{{ snippet.sid }}', onclick='postPraise(this)')
+                    {% else %}
+                    span.glyphicon.glyphicon-thumbs-up.praise-button(data-sid='{{ snippet.sid }}', class='praised')
+                    {% end %}
+                  | &nbsp
+                  span.praise-count {{ len(snippet.praises) }}
+                .snippet-comment.snippet-control.pull-left
+                  a(href='/snippet/comment/{{snippet.sid}}')
+                    span.glyphicon.glyphicon-comment.comment-button(data-sid='{{ snippet.sid }}')
+                  | &nbsp
+                  | {{ len(snippet.comments) }}
+            hr
+          {% end %}

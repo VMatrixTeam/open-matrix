@@ -1,0 +1,141 @@
+
+.tittle-delimeter {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+#new-snippet-editor {
+  resize: none;
+}
+
+.words-num {
+  font-size: 15pt;
+  font-style: italic;
+}
+
+.snippet-slogan {
+  font-weight: normal !important;
+}
+
+.snippet-editor .snippet-editor-footer {
+  margin-top: 10px;
+}
+
+.snippet-editor .addon {
+  margin-left: 10px;
+}
+
+.snippet-editor .addon a, .snippet-editor .addon a:hover {
+  color: #7D878C;
+}
+
+.snippet-editor .addon label, .snippet-editor .addon label:hover {
+  font-weight: normal;
+}
+
+.snippet-editor .addon label:hover {
+  cursor: pointer;
+}
+
+.snippet-editor .addon input {
+  display: none;
+}
+
+.snippet-editor #upload-image-list {
+  margin-top: 50px;
+}
+
+.snippet-editor #upload-image-list img {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #DDDDDD;
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.snippet-editor .code-editor-wrapper {
+  
+}
+
+.snippet-editor #code-editor {
+  /*display: none;*/
+  /*resize: none;*/
+}
+
+.one-snippet .snippet-header .snippet-info .author-name {
+  color: #8c8c8c;
+  font-size: 12pt;
+}
+
+.one-snippet .snippet-header .snippet-info .publish-time {
+  color: #8c8c8c;
+  font-size: small;
+}
+
+.one-snippet .snippet-body {
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-bottom: 15px;
+}
+
+.one-snippet .pictures img {
+  width: 100px;
+  height: 100px;
+  margin: 5px;
+}
+
+.one-snippet .preview-picture {
+  cursor: pointer; cursor: zoom-in;
+}
+
+.one-snippet .snippet-control {
+  margin-right: 10px;
+}
+
+.one-snippet .snippet-control a {
+  color: #8c8c8c;
+  cursor: default;
+}
+
+.one-snippet .snippet-control a:hover {
+  color: black;
+}
+
+.one-snippet .snippet-footer .snippet-praise {
+}
+
+.one-snippet .snippet-control .praise-button, .one-snippet .snippet-control .comment-button {
+  cursor: pointer;
+}
+
+.one-snippet .snippet-control .praise-button.praised {
+  color: black;
+  cursor: default;
+  pointer-events: none;
+}
+
+.one-snippet {
+  margin-bottom: 15px;
+}
+
+.one-snippet .snippet-comments-warpper {
+  margin-top: 15px;
+  margin-left: 50px;
+}
+
+.one-snippet .snippet-comments-warpper .snippet-one-comment  .comment-author-avatar {
+  padding-right: 0;
+}
+
+.one-snippet .snippet-comments-warpper .snippet-one-comment .comment-body {
+  padding-left: 5px;
+}
+
+#big-image {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}

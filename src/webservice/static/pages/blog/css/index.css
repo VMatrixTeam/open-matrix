@@ -1,0 +1,31 @@
+
+.one-blog .blog-author-profile .author-name {
+  margin-top: 5px;
+}
+
+.one-blog .blog-body {
+  min-height: 90px;
+  border-left: solid 1px #ecf1f3;
+}
+
+.one-blog .blog-body .blog-description {
+  margin-bottom: 10px;
+}
+
+.one-blog .blog-body .blog-catalog a   {
+  color: #7F7F7F;
+}
+
+.one-blog .blog-body .blog-catalog a:hover {
+  color: black;
+}
+
+.side-memnu {
+  margin-left: 40px;
+  min-height: 400px;
+  border-left: solid 1px #ecf1f3;
+}
+
+.side-memnu .best-blogers img {
+  margin: 5px
+}

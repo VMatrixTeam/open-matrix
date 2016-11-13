@@ -1,0 +1,49 @@
+.blog-wrapper {
+  margin-top: 20px;
+}
+
+.blog-main {
+  border-right: 1px #ecf1f3 solid;
+  padding: 15px;
+}
+
+.tittle-delimeter {
+  margin-bottom: 5px;
+}
+
+.author-info .author-name {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.author-other-blog .author-other-blog-list, .related-blogs .related-blog-list {
+  list-style: circle;
+  padding-left: 15px;
+}
+
+.impressed-user {
+  margin: 8px;
+}
+
+.one-blog-comment .comment-info {
+  padding-left: 0px;
+}
+
+.one-blog-comment .comment-info .description {
+  color: #999;
+  font-size: 13px;
+}
+
+.one-blog-comment .user-block {
+  margin-bottom: 5px;
+}
+
+.one-blog-comment .block-comment {
+  margin-left: 20px;
+  padding: 10px;
+}
+
+.comment-delimeter {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}

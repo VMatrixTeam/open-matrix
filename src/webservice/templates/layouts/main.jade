@@ -1,0 +1,75 @@
+doctype html
+html
+  head
+    title Open Matrix
+    link(rel='shortcut icon', type='image/png', href='{{static_url("favicon.ico")}}')
+    meta(charset="utf-8")
+    link(rel='stylesheet', href='{{static_url("base/css/bootstrap.min.css")}}')
+    link(rel='stylesheet', href='{{static_url("base/bootflat/css/bootflat.css")}}')
+    link(rel='stylesheet', href='{{static_url("base/css/layout-main.css")}}')
+    style.
+      .tittle-delimeter {
+        margin-top: 10px;
+        margin-buttom: 10px;
+      }
+    block css
+    
+  body
+    nav.navbar.navbar-inverse(role='navigation')
+      .container-fluid
+        .navbar-header
+          a(href="/")
+            .pull-left
+              img(src='{{static_url("base/images/logo-icon.png")}}', width='46px', height='46px')
+            .pull-left
+              .title-matrix OPEN MATRIX
+              .title-community 
+          .pull-left.title-label.label.label-defalut Alpha 1.0
+        #bs-example-navbar-collapse-1.collapse.navbar-collapse
+          ul.nav.navbar-nav
+            li
+              a.tooltip-test(href='/', data-toggle='tooltip', data-placement='bottom', title='Home page') Home
+            li
+              a.tooltip-test(href='/problem', data-toggle='tooltip', data-placement='bottom', title='Problem List') Problem
+            li
+              a.tooltip-test(href='/question', data-toggle='tooltip', data-placement='bottom', title='QA system') Q&A
+            li
+              a.tooltip-test(href='/blog', data-toggle='tooltip', data-placement='bottom', title='Blog system') Blog
+            li
+              a.tooltip-test(href='/snippet', data-toggle='tooltip', data-placement='bottom', title='share your small ideas') Snippet
+            li
+              a.tooltip-test(href='/static-page/about', data-toggle='tooltip', data-placement='bottom', title='About This System') About
+
+          ul.nav.navbar-nav.navbar-right
+            li.dropdown
+              a.dropdown-toggle(href='#', data-toggle='dropdown')
+                | {{current_user.nickname}}
+                span.caret
+              ul.dropdown-menu(role='menu')
+                li
+                  a(href="/static-page/messages") Notifications
+                li
+                  a(href="/static-page/messages") Messages
+                li
+                  a(href='/profile/{{current_user.user_id}}') Profile
+                li.divider
+                li
+                  a(href='/logout') Logout
+
+          div.user-avatar.nav.navbar-nav.navbar-right
+            img.img-circle.pull-left(src="/api/1.0/base/filesystem/avatar/{{current_user.user_id}}", width="30px", height="30px")
+
+    .container.main-contianer
+      block content
+                        
+    footer.matrix-community-footer
+      .container
+        .row
+          .col-md-12
+            center Copyright (c) 2016 Copyright Matrix All Rights Reserved.
+            br
+
+    script(src='{{static_url("base/js/jquery-1.10.1.min.js")}}')
+    script(src='{{static_url("base/js/bootstrap.min.js")}}')
+    
+    block js

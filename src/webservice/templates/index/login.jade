@@ -1,0 +1,38 @@
+extend ../layouts/simple.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/index/css/login.css")}}')
+
+block js
+  script(src='{{static_url("pages/index/js/login.js")}}')
+
+block content
+  .card.card-container
+    img#profile-img.profile-img-card(src='static/images/guest.png')
+    p#profile-name.profile-name-card
+    form.form-signin
+      span#reauth-email.reauth-email
+      input#inputEmail.form-control(type='text', placeholder='Email or Username', required='Email', autofocus='')
+      input#inputPassword.form-control(type='password', placeholder='Password', required='Password')
+      #remember.checkbox
+        label
+          input(type='checkbox', value='remember-me')
+          |  Remember me
+      button#sigin-button.btn.btn-lg.btn-primary.btn-block.btn-signin(type='submit') Sign in
+    // /form
+    a.forgot-password(href='https://vmatrix.org.cn')
+      | Forgot the password?
+  // /card-container
+  
+  .modal.fade#login-info-modal
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type='button', data-dismiss='modal')
+            span(aria-hidden='true') ×
+            span.sr-only Close
+          h4.modal-title Login Info
+        .modal-body
+          p#text-danger login failed
+        .modal-footer
+          button.btn.btn-primary(type='button', data-dismiss='modal') Close

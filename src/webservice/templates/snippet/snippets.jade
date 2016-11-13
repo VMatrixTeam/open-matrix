@@ -1,0 +1,61 @@
+
+| {% for snippet in snippets %}
+| {% import utility.time %}
+section.one-snippet
+  hr
+  .snippet-header.row
+    .author-avatar.col-md-1
+      img.img-circle(src="/api/1.0/base/filesystem/avatar/{{ snippet.author.user_id }}", width="40px", height="40px")
+    .snippet-info.col-md-9
+      .author-name
+        a(href="/profile/{{ snippet.author.user_id }}") {{ snippet.author.nickname }}
+      .publish-time
+        | {{ utility.time.timebefore(snippet.createAt) }}
+  .snippet-body.row
+    .text-content
+      p {{ snippet.content }}
+    .pictures
+      {% for each in snippet.pictures %}
+      img.preview-picture(src="/api/1.0/base/filesystem/picture/snippet/{{ each }}")
+      {% end %}
+    .snippet-code
+      .snippet-code-markdown(style='display:none')
+        ```
+        {{ snippet.code }}
+        ```
+      {% if not snippet.code %}
+      .snippet-code-html.markdown-body(style='display:none')
+      {% else %}
+      .snippet-code-html.markdown-body
+      {% end %}
+      
+  .snippet-footer.row
+    .col-md-12
+      .snippet-praise.snippet-control.pull-left
+        a(href='javascript:void(0)')
+          {% if not snippet.is_praised %}
+          span.glyphicon.glyphicon-thumbs-up.praise-button(data-sid='{{ snippet.sid }}', onclick='postPraise(this)')
+          {% else %}
+          span.glyphicon.glyphicon-thumbs-up.praise-button(data-sid='{{ snippet.sid }}', class='praised')
+          {% end %}
+        | &nbsp
+        span.praise-count {{ len(snippet.praises) }}
+      .snippet-comment.snippet-control.pull-left
+        a(href='/snippet/comment/{{snippet.sid}}')
+          span.glyphicon.glyphicon-comment.comment-button(data-sid='{{ snippet.sid }}')
+        | &nbsp
+        | {{ len(snippet.comments) }}
+
+  //- h6 Comments:
+  //- | {% for comment in snippet.comments %}
+  //- .snippet-comments-warpper
+  //-   .snippet-one-comment
+  //-     .row
+  //-       .col-md-1.comment-author-avatar
+  //-           img.img-circle(src="/api/1.0/base/filesystem/avatar/{{ comment.author.user_id }}", width="30px", height="30px")
+  //-         .author
+  //-       .col-md-11.comment-body
+  //-         | {{ comment.content }}
+  //- {% end %}
+
+{% end %}

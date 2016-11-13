@@ -1,0 +1,28 @@
+{
+  "database" : {
+    "openmatrix" : {
+        "type" : "mysql",
+        "host" : "localhost",
+        "port" : 3306,
+        "database" : "openmatrix",
+        "username" : "openmatrix",
+        "password" : "matrix_is_the_best",
+        "time_zone" : "+8:00",
+        "charset" : "utf8"
+    }
+  },
+  "service" : {
+    "file-system" : {
+      "root_path" : "/openmatrix/"
+    }
+  },
+  "runtime" : {
+    "debug" : true,
+    "compiled_template_cache" : false,
+    "static_hash_cache" : false,
+    "cookie-secret" : "61oETzKXQSHABILILIILOVEYOU7EQnp2XdTP1o/Vo=",
+    "base-url" : "localhost",
+    "protocol": "http",
+    "port" : 8095
+  }
+}
