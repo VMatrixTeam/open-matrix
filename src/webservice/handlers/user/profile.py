@@ -20,33 +20,39 @@ class ProfileHandler(BaseController):
 
       self.render("user/profile.jade", profile_user=user, current_user=self.current_user, records=timeline_recs)
 
+
+
+    ##
+    ## @brief      get timeline format data
+    ##
+    ## @param      self     The object
+    ## @param      user_id  The user identifier
+    ##
+    ## @return     timeline format data
+    ##
     @gen.coroutine
     def process_timeline_data(self, user_id):
       q_records = yield User.get_question_records_by_user_id(user_id)
       a_records = yield User.get_answer_records_by_user_id(user_id)
       c_record = yield User.get_oldest_comment_record_by_user_id(user_id)
-      print 'q_records: ',q_records
       records = self.add_attrs(q_records, 'Question') + self.add_attrs(a_records, 'Answer') + self.add_attrs(c_record, 'Comment')
 
       sort_recs = self.sort_by_time(records)
-      print 'sort_recs: ', sort_recs
       raise gen.Return(sort_recs)
 
     ##
-    ## @brief      Add status,category,date for records
+    ## @brief      为用户行为记录添加“第一次”和“种类”属性
     ##
     ## @param      self       The object
     ## @param      records    The question,answer or comment records which
     ##                        must be in ASCENDING order by 'createAt'
     ## @param      category   To determine which category it is
     ##
-    ## @return     format records
+    ## @return     records with sign
     ##
     def add_attrs(self, records, category):
       if len(records) == 0:
         return records
-      # if len(records) == 1:
-      #   records['status'] = 'first'
       else:
         records[0]['status'] = 'first'
         records[0]['category'] = category
@@ -60,8 +66,7 @@ class ProfileHandler(BaseController):
 
 
     ##
-    ## @brief      sort record list by 'createAt' in DESCENDING order and
-    ##             add month attr for dividing month interval
+    ## @brief      按“月/年”划分用户的活动记录
     ##
     ## @param      self     The object
     ## @param      records  The record list

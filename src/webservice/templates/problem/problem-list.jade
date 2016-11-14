@@ -29,40 +29,31 @@ block content
                 th.reactable-th-acceptance.reactable-header-sortable(role='button', tabindex='0')
                   strong Acceptance
                 th.reactable-th-difficulty.reactable-header-sortable(role='button', tabindex='0')
-                  strong Difficulty
+                  strong Stars
             tbody.reactable-data
+              | {% for problem in problem_list %}
               tr
-                td(label='[object Object]')
-                td(label='[object Object]') 56
-                td(value='Merge Intervals', label='[object Object]')
+                td {{ problem.prob_id }}
+                td
                   div
-                    a(href='/problem/detail/0') Merge Intervals
-                td(value='27.768589054822467', label='[object Object]') 27.8%
-                td(value='[object Object]', label='[object Object]') Hard
-              tr
-                td(label='[object Object]')
-                td(label='[object Object]') 15
-                td(value='3Sum', label='[object Object]')
-                  div
-                    a(href='/problem/detail/0') 3Sum
-                td(value='20.489569150590768', label='[object Object]') 20.5%
-                td(value='[object Object]', label='[object Object]') Medium
-              tr
-                td(label='[object Object]')
-                td(label='[object Object]') 6
-                td(value='ZigZag Conversion', label='[object Object]')
-                  div
-                    a(href='/problem/detail/0') ZigZag Conversion
-                td(value='25.61512716109915', label='[object Object]') 25.6%
-                td(value='[object Object]', label='[object Object]') Easy
+                    a(href='/problem/detail/{{problem.prob_id}}') {{ problem.title }}
+                td {{ problem.acceptance }}
+                td 2342
+              | {% end %}
         .col-md-3
-          a.btn.btn-success.btn-block(href='/question/user/316') My Submissions
+          a.btn.btn-success.btn-block(href='#') My Submissions
         
-          h4 Top Problems
+          h4 Public Problems
           ul
+            | {% for problem in public_problems %}
             li 
-              a(href"/problem/detial/0") Sum the digits
-          
+              a(href="/problem/detial/{{ public.prob_id }}") {{ problem.title }}
+            | {% end %}
           br
           
           h4 Rank
+          ul
+            | {% for user in rank_users %}
+            li
+              a(href="/profile/{{ user.user_id }}") {{ user.nickname }}
+            | {% end %}

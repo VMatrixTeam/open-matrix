@@ -1,4 +1,3 @@
-
 import model.base
 import tornado.gen
 
@@ -60,4 +59,16 @@ class User(object):
             FROM question_comment \
             where author = '{0}' \
             order by createAt ASC limit 0,1".format(user_id))
+        raise tornado.gen.Return(result)
+
+    @staticmethod
+    @tornado.gen.coroutine
+    def get_rank_users():
+        result = yield model.MatrixDB.query("\
+            SELECT u.user_id, SUM(s.grade) as grade \
+            from user u, submission s \
+            where s.user_id = u.user_id \
+            GROUP BY s.user_id \
+            order by grade desc \
+            limit 0, 10")
         raise tornado.gen.Return(result)
