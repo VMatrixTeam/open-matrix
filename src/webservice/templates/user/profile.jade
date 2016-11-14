@@ -87,6 +87,10 @@ block content
           .row
             .col-md-12
               .timeline
+                | {% if len(records) == 0 %}
+                dl
+                  dt You don't have any activities now :). Let's make something amazing.
+                | {% else %}
                 dl
                   | {% for index, record in enumerate(records) %}
                   | {% if record.has_key('month') %}
@@ -106,6 +110,7 @@ block content
                         p Published a new {{ record['category'] }} 
                         | {% end %}
                   | {% end %}
+                | {% end %}
 
         #profile-tab-qas.tab-profile.tab-pane(role='tabpanel')
           h2.profile-second-tittle Statistic

@@ -33,6 +33,7 @@ block content
             tbody.reactable-data
               | {% for problem in problem_list %}
               tr
+                td
                 td {{ problem.prob_id }}
                 td
                   div
@@ -47,7 +48,7 @@ block content
           ul
             | {% for problem in public_problems %}
             li 
-              a(href="/problem/detial/{{ public.prob_id }}") {{ problem.title }}
+              a(href="/problem/detial/{{ problem.prob_id }}") {{ problem.title }}
             | {% end %}
           br
           

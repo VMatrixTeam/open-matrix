@@ -74,6 +74,8 @@ class ProfileHandler(BaseController):
     ## @return     format list
     ##
     def sort_by_time(self, records):
+      if len(records) == 0:
+        return records
       sort_recs = sorted(records, key=lambda x:x['createAt'], reverse=True)
       sort_recs[0]['month'] = d_flag = sort_recs[0]['createAt'].strftime('%m / %Y')
       for rec in sort_recs:

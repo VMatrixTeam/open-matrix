@@ -30,7 +30,7 @@ class ProblemIndexHandler(BaseController):
               item['acceptance'] = str(0)+'%'
           else:
               acc = (float(item['passes']) / float(item['submit_sum']))
-              item['submit_sum'] = str(round(acc, 2)) + '%'
+              item['acceptance'] = str(round(acc, 2)) + '%'
       raise gen.Return(pro_list)
 
     @gen.coroutine

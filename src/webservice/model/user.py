@@ -65,7 +65,7 @@ class User(object):
     @tornado.gen.coroutine
     def get_rank_users():
         result = yield model.MatrixDB.query("\
-            SELECT u.user_id, SUM(s.grade) as grade \
+            SELECT u.user_id, u.nickname, SUM(s.grade) as grade \
             from user u, submission s \
             where s.user_id = u.user_id \
             GROUP BY s.user_id \
