@@ -1,0 +1,12 @@
+{
+  "mysql": {
+    "host":"localhost",
+    "db":"matrix",
+    "username":"matrix",
+    "passwd":"123456"
+  },
+  "sandbox": {
+    "imagename":"sandbox10:libsanbox",
+    "workspace": "/tmp"
+  }
+}

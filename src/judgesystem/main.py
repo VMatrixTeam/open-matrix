@@ -23,7 +23,7 @@ def producer(identifier, queue, lock):
         lock.release()
 
 if __name__ == '__main__':
-    
+
     lock = Lock()
 
     p1 = Process(target=worker, args=("Bob", q, lock))

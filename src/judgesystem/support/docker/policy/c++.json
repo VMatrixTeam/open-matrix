@@ -1,0 +1,17 @@
+{
+    "calls":[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 21, 25, 56, 63, 78, 79, 87, 89, 97, 102, 158, 186, 202, 218, 219, 231, 234, 273],
+    "files":{
+        "/etc/ld.so.cache":524288,
+        "/lib/x86_64-linux-gnu/libc.so.6":524288,
+        "/lib/x86_64-linux-gnu/libm.so.6":524288,
+        "/usr/lib/x86_64-linux-gnu/libstdc++.so.6":524288,
+        "/lib/x86_64-linux-gnu/libgcc_s.so.1":524288,
+        "/lib/x86_64-linux-gnu/libpthread.so.0":524288,
+        "/tmp/UserTestResult.xml":577,
+        "/etc/localtime":524288
+     },
+     "folders":{
+                "/tmp/":[0,2,577]
+      }
+
+}

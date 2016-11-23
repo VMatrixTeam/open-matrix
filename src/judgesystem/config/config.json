@@ -1,0 +1,17 @@
+{
+  "mysql": {
+    "host":"localhost",
+    "db":"matrix",
+    "user":"matrix",
+    "passwd":"123456"
+  },
+  "sandbox": {
+    "imagename":"sandbox10:libsanbox",
+    "workspace": "/tmp"
+  },
+  "filePath":{
+    "submissionFolder":"submissionPath",
+    "standardForlder":"standardPath"
+  },
+  "log_position":"log/judger.log"
+}

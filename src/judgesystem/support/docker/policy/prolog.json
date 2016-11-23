@@ -1,0 +1,27 @@
+{
+    "files": {
+        "/etc/ld.so.cache": 524288,
+        "/lib/x86_64-linux-gnu/libdl.so.2": 524288,
+        "/usr/lib/swi-prolog/swipl.rc": 0,
+        "/usr/bin/swipl": 0,
+        "/lib/x86_64-linux-gnu/libtinfo.so.5": 524288,
+        "/etc/localtime": 524288,
+        "/sys/devices/system/cpu": 591872,
+        "/lib/x86_64-linux-gnu/libpthread.so.0": 524288,
+        "/lib/x86_64-linux-gnu/libc.so.6": 524288,
+        "/tmp/first.pl": 0,
+        "/usr/lib/swi-prolog/bin/amd64/swipl.prc": 0,
+        "/usr/lib/libswipl.so.7.2": 524288,
+        "/tmp/query.pl": 0,
+        "/usr/lib/swi-prolog/bin/amd64/swipl": 0,
+        "/tmp/solve.pl": 0,
+        "/usr/lib/x86_64-linux-gnu/libgmp.so.10": 524288,
+        "/lib/x86_64-linux-gnu/librt.so.1": 524288,
+        "/usr/lib/swi-prolog/bin/swipl.home": 0,
+        "/lib/x86_64-linux-gnu/libm.so.6": 524288,
+        "/lib/x86_64-linux-gnu/libreadline.so.6": 524288,
+        "/usr/lib/swi-prolog/boot64.prc": 0,
+        "/usr/lib/libswipl.so.7.2": 524288
+    },
+    "calls": [0, 1, 2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 16, 21, 72, 78, 79, 89, 97, 99, 158, 186, 218, 228, 231, 273]
+}
