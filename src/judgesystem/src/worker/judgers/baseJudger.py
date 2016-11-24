@@ -11,7 +11,8 @@ class Judger(object):
     def judge(self, submission):
         print "this is the abstractmethod of the judge"
 
-    def write_result_to_database(self, submission_id, result, write_grade):
+    @staticmethod
+    def write_result_to_database(submission_id, result, write_grade):
         """
         @detail
             write the judge result to database
@@ -23,7 +24,7 @@ class Judger(object):
             sql = "update submission set report = {0} where sub_id = \
                     {1}".format(result["report"], submission_id)
         #get the config of database
-        mysql_config = {"db":g_config["mysql"]["db"], "host":g_config["host"]\
+        mysql_config = {"db":g_config["mysql"]["db"], "host":g_config["host"], \
                         "user":g_config["mysql"]["user"], "passwd":g_config["mysql"]["passwd"]}
         #excute the mysql
         Mysqller.execute(mysql, "update", **mysql_config)

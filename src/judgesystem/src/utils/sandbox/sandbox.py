@@ -1,6 +1,6 @@
 import os
 import json
-from shareddata.shareddata import g_config
+from src.shareddata.shareddata import g_config
 
 class Sandbox(object):
     def __init__(self, t_name, t_default_work_space = "/tmp"):

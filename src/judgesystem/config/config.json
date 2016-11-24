@@ -2,16 +2,16 @@
   "mysql": {
     "host":"localhost",
     "db":"matrix",
-    "user":"matrix",
-    "passwd":"123456"
+    "user":"root",
+    "passwd":"2829063qwe"
   },
   "sandbox": {
     "imagename":"sandbox10:libsanbox",
     "workspace": "/tmp"
   },
   "filePath":{
-    "submissionFolder":"submissionPath",
-    "standardForlder":"standardPath"
+    "submissionFolder":"/home/weichuanliu/data/Submission/",
+    "standardFolder":"/home/weichuanliu/data/Standard/"
   },
   "log_position":"log/judger.log"
 }

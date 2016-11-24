@@ -1,1 +1,4 @@
 import baseChecker
+import compileChecker
+import randomChecker
+import standardChecker
