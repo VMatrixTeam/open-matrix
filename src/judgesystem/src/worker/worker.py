@@ -35,5 +35,5 @@ class Worker(Process):
     def run(self):
         while True:
             g_logger.info("[worker]Current queue size is " + str(g_queue.qsize()))
-            current_submission = self.task_queue.get()
-            result = deal_with_task(current_submission)
+            current_submission = g_queue.get()
+            self.deal_with_task(current_submission)

@@ -1,6 +1,6 @@
 import os
 import json
-from src.shareddata.shareddata import g_config
+from src.shareddata.shareddata import g_config, g_logger
 
 class Sandbox(object):
     def __init__(self, t_name, t_default_work_space = "/tmp"):
@@ -13,6 +13,7 @@ class Sandbox(object):
         self.m_name = t_name
         self.m_default_work_space = t_default_work_space
         if not self.start():
+            g_logger.info("start " + t_name + " failed, and restart")
             if not self.reset():
                 raise NameError
         self.m_is_running = True

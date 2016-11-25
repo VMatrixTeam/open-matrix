@@ -1,6 +1,6 @@
 import os
 
-from src.worker.programmingJudger.checkers.baseChecker import Checker
+from src.worker.judgers.programmingJudger.checkers.baseChecker import Checker
 from src.shareddata.shareddata import g_config, g_logger
 class CompileChecker(Checker):
     def __init__(self, t_tag, t_sandbox):
@@ -8,7 +8,7 @@ class CompileChecker(Checker):
         @detail
             initial the checker with its tag and sandbox
         """
-        Checker.__init__(t_tag, t_sandbox)
+        Checker.__init__(self, t_tag, t_sandbox)
 
     @staticmethod
     def get_all_files(submission):
@@ -59,7 +59,7 @@ class CompileChecker(Checker):
             with outputgrame name
         """
         #get predefined compile command,
-        if "standard_language" in problem_config and
+        if "standard_language" in problem_config and\
             "compilers" in problem_config and \
             problem_config["standard_language"] in problem_config["compilers"]:
             compile_command = problem_config["compilers"][problem_config["standard_language"]]\

@@ -1,3 +1,4 @@
+import os
 from src.shareddata.shareddata import g_config
 from src.worker.judgers.baseJudger import Judger
 from src.worker.judgers.programmingJudger.checkers import *
@@ -15,7 +16,7 @@ class ProgrammingJudger(Judger):
                            2:randomChecker.randomChecker.RandomChecker("random tests", t_sandbox),\
                             }
 
-    def judger(self, submission):
+    def judge(self, submission):
          """
          @param
             submission is the detail of a student submission,
@@ -33,11 +34,12 @@ class ProgrammingJudger(Judger):
          problem_id = submission["problem_id"]
          config = submission["problem_config"]
          #ret is used to store the judge result
+         ret = {}
          ret["total_grade"] = 0
          ret["submission_id"] = submission_id
 
          #if missing submission dependency, write the report and return
-         if not (checke_submission_legal(submission_id, problem_id)):
+         if not (ProgrammingJudger.checke_submission_legal(submission_id, problem_id)):
              ret["error"] = "missing submission dependency"
              ret["write_grade"] = 1
              self.write_result_to_database(submission_id, ret, True)
@@ -73,4 +75,4 @@ class ProgrammingJudger(Judger):
             if missing some of them, return False, else True
         """
         return os.path.exists(g_config["filePath"]["submissionFolder"] + str(submission_id)) \
-               and os.path.exists(g_config["filePath"]["standardForlder"] + str(problem_id))
+               and os.path.exists(g_config["filePath"]["standardFolder"] + str(problem_id))

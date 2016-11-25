@@ -1,6 +1,6 @@
 import os
 
-from src.worker.programmingJudger.checkers.baseChecker import Checker
+from src.worker.judgers.programmingJudger.checkers.baseChecker import Checker
 from src.shareddata.shareddata import g_config, g_logger
 
 class StandardChecker(Checker):

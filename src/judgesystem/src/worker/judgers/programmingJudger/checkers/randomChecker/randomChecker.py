@@ -1,6 +1,6 @@
 import os
 
-from src.worker.programmingJudger.checkers.baseChecker import Checker
+from src.worker.judgers.programmingJudger.checkers.baseChecker import Checker
 from src.shareddata.shareddata import g_config, g_logger
 class RandomChecker(Checker):
     def __init__(self, t_tag, t_sandbox):
@@ -55,7 +55,7 @@ class RandomChecker(Checker):
             with outputgrame name
         """
         #get predefined compile command,
-        if "standard_language" in problem_config and
+        if "standard_language" in problem_config and\
             "compilers" in problem_config and \
             problem_config["standard_language"] in problem_config["compilers"]:
             compile_command = problem_config["compilers"][problem_config["standard_language"]]\
@@ -108,7 +108,7 @@ class RandomChecker(Checker):
         #get the language of current_submission
         standard_language = problem_config["standard_language"]
 
-        #if C，C++，pascal, generate exe file and pull it to local folder
+        #if C,C++,pascal, generate exe file and pull it to local folder
         if "c" == standard_language or "c++" == standard_language or "pascal" ==\
                 standard_language:
             #generate compile_command
@@ -118,7 +118,7 @@ class RandomChecker(Checker):
                                  && " + command + "2>&1")
                 innerfile = "/tmp/standard_main.exe/standard_main.exe"
                 standard_program_folder = get_standard_program_folder(submission["problem_id"])
-                if False == self.m_sandbox.pull(innerfile, standard_program_folder)
+                if False == self.m_sandbox.pull(innerfile, standard_program_folder):
                     return False
             except:
                 return False
@@ -145,6 +145,7 @@ class RandomChecker(Checker):
         correct_case_count = 0
         wrong_case_count = 0
         abnormal_case_count = 0
+        standard_wrong_case = 0
 
         #create the execute command according to the standard_language
         execute_command = ""
@@ -176,4 +177,87 @@ class RandomChecker(Checker):
         standard_program = get_standard_program_folder(submission["problem_id"])
 
         #check whether the standard exe program exists, if not, generate it
-        if not os.path.exists()
+        if not os.path.exists(standard_program):
+            if not generate_standard_exe(submission):
+                ret["report"][self.getTag()].update({"message":"no standard program found"})
+                return ret
+        else:
+            self.m_sandbox.pipe_exec("cd /tmp && mkdir standard_main.exe")
+            self.m_sandbox.push(standard_program, "/tmp/standard_main.exe")
+
+        #get submission program name
+        submission_program = problem_config["output_program"]
+
+        #execute the submission_program and tandard_program and compare their output
+        for i in xrange(0, random_time):
+            if abnormal_case_count >= 5:
+                break
+
+            #execute the random program and get the standard_input
+            try:
+                random_test_input = self.m_sandbox.pipe_exec("/tmp/random > \
+                                    /tmp/random.input && cat /tmp/random.input")
+            except:
+                if standard_wrong_case < 1:
+                    ret["report"][self.getTag()].update({"message":"system \
+                                                internal error(random program)"})
+                standard_wrong_case += 1
+                continue
+
+            #execute the standard program using the random.input and get the
+            #standard output
+            try:
+                temp_result = self.m_sandbox.crun(
+                            "/policy/" + standard_language + ".json",
+                            "/tmp/random.input",
+                            time_limit,memory_limit * 1024,
+                            standard_execute_command)
+                #check if standard program execute normal or not
+                if "OK" != temp_result["result"]:
+                    if standard_wrong_case < 1:
+                        ret["report"][self.getTag()].update({"message":\
+                                            "standard program internal error"})
+                    standard_wrong_case += 1
+                    continue
+                standard_program_output = temp_result["stdout"]
+            except:
+                if standard_wrong_case < 1:
+                    ret["report"][self.getTag()].update({"message":\
+                                            "standard program internal error"})
+                standard_wrong_case += 1
+                continue
+
+            #execute the student submission, and get the output of it, compare
+            try:
+                temp_result = self.m_sandbox.crun(
+                            "/policy/" + standard_language + ".json",
+                            "/tmp/random.input",
+                            time_limit, memory_limit * 1024,
+                            execute_command)
+                if "OK" != temp_result["result"]:
+                    if (abnormal_case_count < 1):
+                        temp_result["stdout"] = temp_result["stdout"][:1024]
+                        temp_result["standard_stdout"] = standard_program_output[:1024]
+                        ret["report"][self.getTag()].update(temp_result)
+                    abnormal_case_count += 1
+                    continue
+
+                #if student submission is OK, compare the output with standard
+                submission_program_output = temp_result["stdout"]
+                if standard_program_output == submission_program_output:
+                    if correct_case_count < 1:
+                        temp_result["stdout"] = temp_result["stdout"][:1024]
+                        temp_result["result"] = "CR"
+                        ret["report"][self.getTag()].update(temp_result)
+                    correct_case_count += 1
+                else:
+                    if wrong_case_count < 1:
+                        temp_result["stdout"] = temp_result["stdout"][:1024]
+                        temp_result["standard_stdout"] = standard_program_output[:1024]
+                        temp_result["result"] = "WA"
+                        ret["report"][self.getTag()].update(temp_result)
+                    wrong_case_count += 1
+            except:
+                ret["report"][self.getTag()].update({"messgae":"Malicious code\
+                            detected!", "result":"IE"})
+                return ret
