@@ -13,6 +13,13 @@ $(document).ready(function() {
       return hljs.highlightAuto(code).value;
     }
   });
+
+  var markdown_preview = $('.comment-body');
+  for(var i = 0; i < markdown_preview.length; i++) {
+    $(markdown_preview[i]).find('.commentc-content-html').html(marked($(markdown_preview[i]).find('.commentc-content-markdown').text()))
+    MathJax.Hub.Typeset(markdown_preview[i]);
+  }
+
   var simplemde = new SimpleMDE({
     element: $("#comment-editor")[0],
     previewRender: function(plainText, preview) { // Async method

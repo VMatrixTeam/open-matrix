@@ -94,7 +94,10 @@ block content
               a(href="#") 
           // /.user-block
           .block-comment
-            .comment-body {{ comment.content }}
+            .comment-body
+              .commentc-content-markdown(style='display:none')
+                | {{ comment.content }}
+              .commentc-content-html.markdown-body
         hr.comment-delimeter
         {% end %}
         //- section.one-blog-comment
@@ -134,9 +137,11 @@ block content
             a.label.label-primary(href='javascript:void(0)') notes
           .tags
             h5 Tags:
-            a.label.label-primary(href='javascript:void(0)') web-service
+            {% for tag in blog.tags %}
+            a.label.label-primary(href='javascript:void(0)') {{ tag.tag }}
             | &nbsp
-            a.label.label-primary(href='javascript:void(0)') Framework
+            {% end %}
+            //- a.label.label-primary(href='javascript:void(0)') Framework
           .author-other-blog
             h5 His Blogs:
             ul.author-other-blog-list

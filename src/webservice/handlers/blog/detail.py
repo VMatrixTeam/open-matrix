@@ -5,6 +5,7 @@ from model.blog.blog import Blog
 from model.blog.read import Read
 from model.blog.praise import Praise
 from model.blog.comment import Comment
+from model.blog.tag import Tag
 
 from model.user import User
 
@@ -21,6 +22,7 @@ class BlogDetailHandler(BaseController):
         blog.praises_num = yield Praise.get_praise_num_by_bid(blog.bid)
         blog.comments_num = yield Comment.get_comment_num_by_bid(blog.bid)
         blog.comments = yield Comment.get_comments_by_bid(blog.bid)
+        blog.tags = yield Tag.get_tags_by_bid(blog.bid)
 
         author_other_blogs = yield Blog.get_author_other_blogs_by_uid(blog.author.user_id, bid)
         related_blogs = yield Blog.get_related_blogs_by_bid(bid)

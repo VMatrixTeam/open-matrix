@@ -64,7 +64,7 @@ class BlogHandler(BaseController):
             # Score.add_score(50, "create question "+str(e_question.qid), self.current_user.user_id)
 
             tags = json.loads(tags)
-
+            
             for tag in tags:
                 tid = yield Tag.create_tag(bid, tag)
 
