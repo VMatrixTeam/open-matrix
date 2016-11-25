@@ -6,6 +6,7 @@ from handlers.service.question.question import QuestionHandler
 
 from handlers.service.blog.blog import BlogHandler
 from handlers.service.blog.praise import PraiseHandler as BlogPraiseHandler
+from handlers.service.blog.comment import CommentHandler as BlogCommentHandler
 
 from handlers.service.snippet.snippet import SnippetHandler
 from handlers.service.snippet.praise import PraiseHandler as SnippetPraiseHandler
@@ -26,6 +27,7 @@ urls = [
     
     (r'/api/{0}/blog/blog'.format(version), BlogHandler),
     (r'/api/{0}/blog/praise'.format(version), BlogPraiseHandler),
+    (r'/api/{0}/blog/comment'.format(version), BlogCommentHandler),
 
     (r'/api/{0}/snippet/snippet'.format(version), SnippetHandler),
     (r'/api/{0}/snippet/praise'.format(version), SnippetPraiseHandler),

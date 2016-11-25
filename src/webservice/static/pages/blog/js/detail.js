@@ -14,7 +14,7 @@ $(document).ready(function() {
     }
   });
   var simplemde = new SimpleMDE({
-    element: $("#comment-edictor")[0],
+    element: $("#comment-editor")[0],
     previewRender: function(plainText, preview) { // Async method
       $(preview).addClass('markdown-body');
       $(preview).html(marked(plainText));
@@ -123,4 +123,37 @@ $(document).ready(function() {
       }
     )
   });
+
+  $("#comment-submit-button").on("click", function(event) {
+    var content = simplemde.value();
+    var bid = $(event.target).data('bid');
+
+    if(content.length == 0) {
+      alert("comment内容不能为空!");
+      return false;
+    }
+
+    if(content.length > 3000) {
+      alert("comment内容不能大于3000字符!");
+      return false;
+    }
+
+    // post the content to server
+    $.post(
+      '/api/1.0/blog/comment',
+      {
+        method : 'create',
+        content : content,
+        bid : bid
+      },
+      function(data) {
+        if(data.result) {
+          window.location.reload();
+        } else {
+          alert(data.msg);
+        }
+      }
+    )
+  });
+
 });

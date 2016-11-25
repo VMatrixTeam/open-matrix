@@ -119,8 +119,8 @@ block content
         //- hr.comment-delimeter
         
         h5 Comment it
-        textarea#comment-edictor
-        button.btn.btn-success(type='button') Submit Comment
+        textarea#comment-editor
+        button#comment-submit-button.btn.btn-success(type='button', data-bid='{{ blog.bid }}') Submit Comment
       .col-md-3
         .side-info-bar
           .author-info.text-center

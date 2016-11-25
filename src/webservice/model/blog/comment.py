@@ -27,7 +27,9 @@ class Comment(object):
     @staticmethod
     @tornado.gen.coroutine
     def create_comment(author_id, bid, content):
-        pass
+        content = content.replace("%", "%%")
+        row_id = yield model.MatrixDB.execute("insert into blog_comment (author, createAt, updateAt, bid, content) values ({0}, now(), now(), {1}, '{2}')".format(author_id, bid, escape_string(content)))
+        raise tornado.gen.Return(row_id)
 
     @staticmethod
     @tornado.gen.coroutine
