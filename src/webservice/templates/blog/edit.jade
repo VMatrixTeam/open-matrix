@@ -1,0 +1,109 @@
+
+extend ../layouts/main.jade
+
+block css
+  link(rel='stylesheet', href='{{static_url("pages/blog/css/detail.css")}}')
+  link(rel='stylesheet', href='{{static_url("base/css/github-markdown.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/simple-mde/simplemde.min.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/highlight/styles/github.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/taginput-boostrap/bootstrap-tagsinput.css")}}')
+  link(rel='stylesheet', href='{{static_url("vender/simple-mde/simplemde.min.css")}}')
+  style.
+    .CodeMirror, .CodeMirror-scroll {
+        min-height: 300px;
+        background: none !important;
+    }
+
+    .CodeMirror {
+        height: 300px;
+        background: none !important;
+    }
+  
+block js
+  script(src='{{static_url("vender/marked.js")}}')
+  script(src='{{static_url("vender/simple-mde/simplemde.min.js")}}')
+  script(src='{{static_url("vender/highlight/highlight.pack.js")}}')    
+  script(src='{{static_url("vender/taginput-boostrap/bootstrap-tagsinput.js")}}')
+  script(src='{{static_url("vender/attachment/inline-attachment.js")}}')
+  script(src='{{static_url("vender/attachment/codemirror-4.inline-attachment.js")}}')
+  script(src='{{static_url("vender/bootstrap3-typeahead.min.js")}}')
+  script(type='text/x-mathjax-config').
+    MathJax.Hub.Config({
+     showProcessingMessages: false,
+     tex2jax: { inlineMath: [['$','$'],['\\\(','\\)']] },
+     TeX: { equationNumbers: {autoNumber: "AMS"} }
+    });
+  script(src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
+  script.
+    $("#tag-input").tagsinput({
+      maxTags: 5,
+      typeahead: {
+        afterSelect: function(val) { this.$element.val(""); },
+        source: function(query, process) {
+          return $.post(
+            '/api/1.0/question/tag',
+            {
+              method : "search",
+              query : query
+            },
+            function(data) {
+
+            },
+            'json'
+          )
+        }
+      },
+      freeInput: true,
+      maxChars: 10,
+      trimValue: true
+    });
+    $(document).ready(function() {
+      var tags = $("#tag-initial").data('tags');
+      if(tags != null) {
+        for(var i = 0; i < tags.length; i++) {
+          $("#tag-input").tagsinput('add', tags[i]);
+        }
+      }
+    })
+  script(src='{{static_url("pages/blog/js/edit.js")}}')
+
+block content
+  .row  
+    .col-md-12
+      .row
+        .col-md-9
+          h3 {{ title }}
+
+      hr.tittle-delimeter
+
+      {% if not blog %}
+      form
+        .row
+          .col-md-12
+            input.form-control#new-blog-title(name='title', type='text', placeholder='Title', width='100%')
+            br
+        .row
+          .col-md-11
+            #tag-input.form-control(data-role="tagsinput", type='text', value="[]", width='100%', placeholder="Input your Tags, Max : 5") 
+        br
+        textarea#new-blog-editor(data-provide='markdown', rows='10')
+
+        br
+        a#blog-submit-button.btn.btn-success Post
+      {% else %}
+      //- form
+      //-   .row
+      //-     .col-md-12
+      //-       input.form-control#new-question-title(name='title', type='text', placeholder='Title', width='100%', value='{{question.title}}')
+      //-       br
+      //-   .row
+      //-     .col-md-11
+      //-       {% import json %}
+      //-       #tag-initial(data-tags='{{json.dumps([tag.tag for tag in question.tags])}}')
+      //-       #tag-input.form-control(data-role="tagsinput", type='text', width='100%', placeholder="Input your Tags, Max : 5") 
+      //-   br
+      //-   textarea#new-question-editor(data-provide='markdown', rows='10') {{question.description}}
+
+      //-   br
+      //-   a#question-modify-submit-button.btn.btn-success(data-qid='{{question.qid}}') Submit Modification
+      {% end %}

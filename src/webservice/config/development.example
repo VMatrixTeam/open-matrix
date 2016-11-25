@@ -2,11 +2,11 @@
   "database" : {
     "openmatrix" : {
         "type" : "mysql",
-        "host" : "localhost",
-        "port" : 3306,
+        "host" : "eden.sysu.edu.cn",
+        "port" : 3309,
         "database" : "openmatrix",
         "username" : "openmatrix",
-        "password" : "matrix_is_the_best",
+        "password" : "openmatrix123456",
         "time_zone" : "+8:00",
         "charset" : "utf8"
     }

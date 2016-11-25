@@ -33,20 +33,26 @@ block content
   .blog-wrapper
     .row    
       .col-md-9.blog-main
-        h3 An introduction to node.js programming
+        h3 {{ blog.title }}
         hr.tittle-delimeter
         .blog-info
           span.glyphicon.glyphicon-eye-open 
-          | &nbsp read 100 times
+          | &nbsp read {{ blog.reads_num }} times
           &nbsp
           span.glyphicon.glyphicon-time 
-          | &nbsp updated 10 hours ago
+          | &nbsp
+          | {% import utility.time %}
+          | {% if blog.createAt == blog.updateAt %}
+          | created {{utility.time.timebefore(blog.updateAt)}}
+          | {% else %}
+          | updated {{utility.time.timebefore(blog.updateAt)}}
+          | {% end %}
           &nbsp
           span.glyphicon.glyphicon-comment
-          | &nbsp 100 comments
+          | &nbsp {{ blog.comments_num }} comments
           &nbsp
           span.glyphicon.glyphicon-thumbs-up
-          | &nbsp 1k praise
+          | &nbsp {{ blog.praises_num }} praise
         .content
           p
             img(src='https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Gradient_descent.svg/350px-Gradient_descent.svg.png', alt='')
@@ -66,48 +72,51 @@ block content
           p
             em from Wikipedia
         br
-        h4 comments (100)
+        h4 comments ({{ blog.comments_num }})
         hr
+        | {% for comment in blog.comments %}
         section.one-blog-comment
           .row.user-block
             .col-md-1.text-center.author-avatar
-              img.img-circle.img-bordered-sm(src='/api/1.0/base/filesystem/avatar/316', alt='user image', width='40px', height='40px')
+              img.img-circle.img-bordered-sm(src='/api/1.0/base/filesystem/avatar/{{ comment.author.user_id }}', alt='user image', width='40px', height='40px')
             .col-md-6.comment-info
               span.username
-                a(href='#') Jonathan Burke Jr.
+                a(href='#') {{ comment.author.nickname }}
               br
-              span.description Commented - 7:30 PM today
+              span.description Commented - 
+              | {% import utility.time %}
+              | {% if comment.createAt == comment.updateAt %}
+              | created {{utility.time.timebefore(comment.updateAt)}}
+              | {% else %}
+              | updated {{utility.time.timebefore(comment.updateAt)}}
+              | {% end %}
               | &nbsp
               a(href="#") 
           // /.user-block
           .block-comment
-            .comment-body
-              | Lorem ipsum represents a long-held tradition for designers,
-              | typographers and the like. Some people hate it and argue for
-              | its demise, but others ignore the hate as they create awesome
-              | tools to help create filler text for everyone from bacon lovers
-              | to Charlie Sheen fans.
+            .comment-body {{ comment.content }}
         hr.comment-delimeter
-        section.one-blog-comment
-          .row.user-block
-            .col-md-1.text-center.author-avatar
-              img.img-circle.img-bordered-sm(src='/api/1.0/base/filesystem/avatar/316', alt='user image', width='40px', height='40px')
-            .col-md-6.comment-info
-              span.username
-                a(href='#') Jonathan Burke Jr.
-              br
-              span.description Commented - 7:30 PM today
-              | &nbsp
-              a(href="#") 
-          // /.user-block
-          .block-comment
-            .comment-body
-              | Lorem ipsum represents a long-held tradition for designers,
-              | typographers and the like. Some people hate it and argue for
-              | its demise, but others ignore the hate as they create awesome
-              | tools to help create filler text for everyone from bacon lovers
-              | to Charlie Sheen fans.
-        hr.comment-delimeter
+        {% end %}
+        //- section.one-blog-comment
+        //-   .row.user-block
+        //-     .col-md-1.text-center.author-avatar
+        //-       img.img-circle.img-bordered-sm(src='/api/1.0/base/filesystem/avatar/316', alt='user image', width='40px', height='40px')
+        //-     .col-md-6.comment-info
+        //-       span.username
+        //-         a(href='#') Jonathan Burke Jr.
+        //-       br
+        //-       span.description Commented - 7:30 PM today
+        //-       | &nbsp
+        //-       a(href="#") 
+        //-   // /.user-block
+        //-   .block-comment
+        //-     .comment-body
+        //-       | Lorem ipsum represents a long-held tradition for designers,
+        //-       | typographers and the like. Some people hate it and argue for
+        //-       | its demise, but others ignore the hate as they create awesome
+        //-       | tools to help create filler text for everyone from bacon lovers
+        //-       | to Charlie Sheen fans.
+        //- hr.comment-delimeter
         
         h5 Comment it
         textarea#comment-edictor
@@ -115,10 +124,10 @@ block content
       .col-md-3
         .side-info-bar
           .author-info.text-center
-            img.img-circle(src="/api/1.0/base/filesystem/avatar/316", width="100px", height="100px")
+            img.img-circle(src="/api/1.0/base/filesystem/avatar/{{ blog.author.user_id }}", width="100px", height="100px")
             br
             .author-name
-              a(href="/profile/316") 1+7
+              a(href="/profile/{{ blog.author.user_id }}") {{ blog.author.nickname }}
           hr
           .catalog
             h5 Catalog:
@@ -131,15 +140,21 @@ block content
           .author-other-blog
             h5 His Blogs:
             ul.author-other-blog-list
-              li: a(href="#") Python Tornado Framework with MVC
-              li: a(href="#") Nojde Express Framework with MVC
-              li: a(href="#") Ruby on Rails Framework with MVC
+              {% for author_other_blog in author_other_blogs %}
+              li: a(href="/blog/detail/{{ author_other_blog.bid }}") {{ author_other_blog.title }}
+              {% end %}
           .related-blogs
             h5 Related Blogs:
             ul.related-blog-list
-              li: a(href="#") Python Tornado Framework with MVC
-              li: a(href="#") Nojde Express Framework with MVC
-              li: a(href="#") Ruby on Rails Framework with MVC
+              {% for related_blog in related_blogs %}
+              li: a(href="/blog/detail/{{ related_blog.bid }}") {{ related_blog.title }}
+              {% end %}
+          //- .related-blogs
+          //-   h5 Related Blogs:
+          //-   ul.related-blog-list
+          //-     li: a(href="#") Python Tornado Framework with MVC
+          //-     li: a(href="#") Nojde Express Framework with MVC
+          //-     li: a(href="#") Ruby on Rails Framework with MVC
           .impressed-users
             h5 Impressed users:
             p 20 users thought this blog is impressed!
@@ -147,4 +162,4 @@ block content
             img.img-circle.impressed-user(src="/api/1.0/base/filesystem/avatar/3", width="50px", height="50px")
             img.img-circle.impressed-user(src="/api/1.0/base/filesystem/avatar/316", width="50px", height="50px")
             img.img-circle.impressed-user(src="/api/1.0/base/filesystem/avatar/5", width="50px", height="50px")
-            a.btn.btn-primary.btn-md.btn-block(type="button", width="100%", href="javascript:void(0)") Praise
+            a#btn-praise.btn.btn-primary.btn-md.btn-block(type="button", width="100%", href="javascript:void(0)") Praise

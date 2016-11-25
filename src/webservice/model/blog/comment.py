@@ -1,5 +1,5 @@
 
-import model.base
+import model
 import tornado.gen
 from MySQLdb import escape_string
 
@@ -17,7 +17,12 @@ class Comment(object):
     @staticmethod
     @tornado.gen.coroutine
     def get_comments_by_bid(bid):
-        pass
+        result = yield model.MatrixDB.query("select * from blog_comment where bid = {0}".format(bid))
+
+        for each in result:
+            each.author = yield model.MatrixDB.get("select * from user where user_id = {0}".format(each.author))
+
+        raise tornado.gen.Return(result)
 
     @staticmethod
     @tornado.gen.coroutine

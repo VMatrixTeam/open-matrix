@@ -39,6 +39,10 @@ block js
       }
     });
 
+    $('#btn-write').on('click', function() {
+      window.location = "/blog/create";
+    });
+
 block content
   .row
     .col-md-12
@@ -86,11 +90,11 @@ block content
 
         .col-md-3.side-memnu
           h5 My Blog
-          a.btn.btn-primary.btn-md.btn-block(type="button", width="100%", href="javascript:void(0)")
+          a#btn-write.btn.btn-primary.btn-md.btn-block(type="button", width="100%", href="javascript:void(0)")
             span.glyphicon.glyphicon-pencil
             | &nbsp
             | Write a blog
-          a.btn.btn-success.btn-md.btn-block(type="button", width="100%", href="javascript:void(0)")
+          a#btn-mine.btn.btn-success.btn-md.btn-block(type="button", width="100%", href="javascript:void(0)")
             span.glyphicon.glyphicon-book
             | &nbsp
             | My Blogs
@@ -108,7 +112,7 @@ block content
           br
           h5 Weekly Best Blogers
           .text-left.best-blogers
-            img.img-circle(src="/api/1.0/base/filesystem/avatar/302", width="60px", height="60px")
-            img.img-circle(src="/api/1.0/base/filesystem/avatar/316", width="60px", height="60px")
-            img.img-circle(src="/api/1.0/base/filesystem/avatar/2", width="60px", height="60px")
-            img.img-circle(src="/api/1.0/base/filesystem/avatar/3", width="60px", height="60px")
+            | {% for blog in top_blogs %}
+            a(href="/profile/{{blog.author.user_id}}")
+              img.img-circle(src="/api/1.0/base/filesystem/avatar/{{blog.author.user_id}}", width="60px", height="60px")
+            | {% end %}

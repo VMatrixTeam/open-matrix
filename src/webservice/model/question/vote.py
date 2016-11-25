@@ -1,5 +1,5 @@
 
-import model.base
+import model
 import tornado.gen
 
 class Vote(object):

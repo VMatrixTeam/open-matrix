@@ -1,18 +1,18 @@
 $(document).ready(function() {
 
   marked.setOptions({
-      renderer: new marked.Renderer(),
-      gfm: true,
-      tables: true,
-      breaks: true,
-      pedantic: false,
-      sanitize: false,
-      smartLists: false,
-      smartypants: false,
-      highlight: function (plainText, preview) {
-        return hljs.highlightAuto(code).value;
-      }
-    });
+    renderer: new marked.Renderer(),
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: false,
+    smartLists: false,
+    smartypants: false,
+    highlight: function (plainText, preview) {
+      return hljs.highlightAuto(code).value;
+    }
+  });
   var simplemde = new SimpleMDE({
     element: $("#comment-edictor")[0],
     previewRender: function(plainText, preview) { // Async method
@@ -103,5 +103,26 @@ $(document).ready(function() {
         tittle: "Markdown Guide"
       }
     ],
+  });
+
+  $("#btn-praise").on("click", function() {
+    alert(2333)
+    $.post(
+      "/api/1.0/blog/praise",
+      {
+        method : 'create',
+        bid : bid
+      },
+      function(data) {
+        if(data.result) {
+          // // window.location = "/snippet"
+          // var temp = that.parent().siblings('.praise-count');
+          // temp.text(parseInt(temp.text())+1);
+          // that.addClass('praised');
+        } else {
+          alert(data.msg);
+        }
+      }
+    )
   });
 });

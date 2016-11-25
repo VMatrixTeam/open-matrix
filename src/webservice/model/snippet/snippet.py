@@ -1,4 +1,4 @@
-import model.base
+import model
 import tornado.gen
 import json
 

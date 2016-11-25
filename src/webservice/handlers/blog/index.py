@@ -33,11 +33,23 @@ class BlogIndexHandler(BaseController):
 
         blogs_count = yield Blog.get_blog_num()
 
+        top_blogs = yield self.get_top_blogs_by_count(5)
+
         data = {
             'current_user' : self.current_user,
             'page_current' : page,
             'page_count' : blogs_count / self.item_in_page + 1,
-            'blogs' : blogs
+            'blogs' : blogs,
+            'top_blogs' : top_blogs
         }
 
         self.render('blog/index.jade', **data)
+
+    @gen.coroutine
+    def get_top_blogs_by_count(self, count):
+        top_blogs = yield Blog.get_top_blogs_by_count(count)
+
+        for blog in top_blogs:
+            blog.author = yield User.get_user_by_id(blog.author)
+
+        raise gen.Return(top_blogs)

@@ -1,7 +1,7 @@
 
 # json module
 import json
-import model.base
+import model
 
 # tornado web module
 import tornado.web
@@ -24,14 +24,14 @@ class BaseController(tornado.web.RequestHandler):
     subclass this one.
     """
 
-    def sendData(result=False, msg="", data=None):
+    def sendData(self, result=False, msg="", data=None):
         self.write({
             "result" : result,
             "msg" : msg,
             "data" : data
         })
 
-    def sendError(msg=""):
+    def sendError(self, msg=""):
         self.sendData(msg=msg)
 
     def get_all_arguments_list(self):
