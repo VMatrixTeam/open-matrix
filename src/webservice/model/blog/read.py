@@ -22,4 +22,5 @@ class Read(object):
     @staticmethod
     @tornado.gen.coroutine
     def create_read(bid, user_id):
-        pass
+        row_id = yield model.MatrixDB.execute("insert into blog_read (user_id, bid) values ({0}, {1})".format(user_id, bid))
+        raise tornado.gen.Return(row_id)

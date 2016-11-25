@@ -106,7 +106,8 @@ $(document).ready(function() {
   });
 
   $("#btn-praise").on("click", function() {
-    alert(2333)
+    var bid = $(event.target).data('bid');
+
     $.post(
       "/api/1.0/blog/praise",
       {
@@ -115,10 +116,7 @@ $(document).ready(function() {
       },
       function(data) {
         if(data.result) {
-          // // window.location = "/snippet"
-          // var temp = that.parent().siblings('.praise-count');
-          // temp.text(parseInt(temp.text())+1);
-          // that.addClass('praised');
+          alert(data.msg);
         } else {
           alert(data.msg);
         }

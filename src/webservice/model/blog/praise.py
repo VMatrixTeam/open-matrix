@@ -22,9 +22,16 @@ class Praise(object):
     @staticmethod
     @tornado.gen.coroutine
     def create_praise(bid, user_id):
-        pass
+        row_id = yield model.MatrixDB.execute("insert into blog_praise (author, bid, createAt) values ({0}, {1}, now())".format(user_id, bid))
+        raise tornado.gen.Return(row_id)
 
     @staticmethod
     @tornado.gen.coroutine
     def delete_praise(bid, user_id):
         pass
+
+    @staticmethod
+    @tornado.gen.coroutine
+    def get_praises_count_by_bid_user_id(bid, user_id):
+        result = yield model.MatrixDB.get("select count(*) as count from blog_praise where bid = {0} and author = {1}".format(bid, user_id))
+        raise tornado.gen.Return(result.count)

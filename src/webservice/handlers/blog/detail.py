@@ -34,5 +34,7 @@ class BlogDetailHandler(BaseController):
 
         self.render('blog/detail.jade', **data)
 
+        yield Read.create_read(bid, self.current_user.user_id)
+
     def post(self):
         pass
