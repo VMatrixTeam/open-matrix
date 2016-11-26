@@ -6,6 +6,7 @@ block css
   link(rel='stylesheet', href='{{static_url("vender/boot-markdown/css/bootstrap-markdown.min.css")}}')
 
 block js
+  script(src='{{static_url("vender/marked.js")}}')
   script(src='{{static_url("vender/d3.min.js")}}', charset='utf-8')
   script(src='{{static_url("vender/cal-heatmap/cal-heatmap.min.js")}}')
   script(src='{{static_url("vender/boot-markdown/js/bootstrap-markdown.js")}}')
@@ -173,8 +174,100 @@ block content
                 span.time 10 mins ago
           hr  
         
-        #profile-tab-blogs.tab-profile.tab-pane(role='tabpanel') Under Construction
-        #profile-tab-snippets.tab-profile.tab-pane(role='tabpanel') Under Construction
+        #profile-tab-blogs.tab-profile.tab-pane(role='tabpanel')
+          h2.profile-second-tittle Statistic
+          .row.blog-statistic
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Blogs
+
+          h2.profile-second-tittle Recent Blogs
+          hr
+          section.one-blog
+            .row
+              .col-md-8
+                a(href='/question/detail/1')
+                  | What is C++?
+                &nbsp
+                a.label.label-primary(href='javascript:void(0)') languages
+              .col-md-4
+                | Published at 13:09 on 11.11
+          hr
+          section.one-blog
+            .row
+              .col-md-8
+                a(href='/question/detail/1')
+                  | The Difference of Eight Sort Algorithm
+                &nbsp
+                a.label.label-primary(href='javascript:void(0)') Algorithm
+              .col-md-4
+                | Published at 13:10 on 11.11
+          hr
+
+        #profile-tab-snippets.tab-profile.tab-pane(role='tabpanel')
+          h2.profile-second-tittle Statistic
+          .row.snippet-statistic
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Snippet
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Comment
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Votes
+            .col-md-2
+              span.number
+                | 0
+              .clear
+              | Reputaion
+          h2.profile-second-tittle Popular Snippet
+          hr
+          section.one-snippet
+            .row
+              .col-md-5
+                span
+                  | Dom, dom dom dom dom~
+              .col-md-3
+                | 0 votes 0 comment
+              .col-md-4
+                | published 
+                span.time 10 mins ago
+          hr
+          section.one-snippet
+            .row
+              .col-md-5
+                span
+                  | hei hei hei
+              .col-md-3
+                | 0 votes 0 comment
+              .col-md-4
+                | published 
+                span.time 10 mins ago
+          hr
+
+          h2.profile-second-tittle Recent Comment
+          hr
+          section.one-question
+            .row
+              .col-md-5
+                span
+                  | Good!
+              .col-md-3
+                | 0 votes
+              .col-md-4
+                | published
+                span.time 10 mins ago
+          hr  
+
         #profile-tab-messages.tab-profile.tab-pane(role='tabpanel')
           h2.profile-second-tittle Messages
           .one-post

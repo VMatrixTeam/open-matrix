@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import model.base
+import model
 import tornado.gen
 from MySQLdb import escape_string
 

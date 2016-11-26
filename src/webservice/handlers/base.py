@@ -1,7 +1,7 @@
 
 # json module
 import json
-import model.base
+import model
 
 # tornado web module
 import tornado.web

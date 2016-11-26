@@ -61,13 +61,13 @@
   color: black;
 }
 
-.question-statistic {
+.question-statistic, .blog-statistic, .snippet-statistic {
   color: #999FA5;
   font-size: 13px;
   text-align: center;
 }
 
-.question-statistic .number {
+.question-statistic .number,  .blog-statistic .number, .snippet-statistic .number{
   color: black;
   font-size: 17px;
   font-weight: bold;

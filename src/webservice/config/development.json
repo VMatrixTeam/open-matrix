@@ -1,0 +1,29 @@
+{
+  "database" : {
+    "openmatrix" : {
+        "type" : "mysql",
+        "host" : "eden.sysu.edu.cn",
+        "port" : 3309,
+        "database" : "openmatrix",
+        "username" : "openmatrix",
+        "password" : "openmatrix2016abc",
+        "time_zone" : "+8:00",
+        "charset" : "utf8"
+    }
+  },
+  "service" : {
+    "file-system" : {
+      "root_path" : "$HOME/openmatrix"
+    }
+  },
+  "runtime" : {
+    "debug" : true,
+    "compiled_template_cache" : false,
+    "static_hash_cache" : false,
+    "cookie-secret" : "61oETzKXQSHABILILIILOVEYOU7EQnp2XdTP1o/Vo=",
+    "base-url" : "localhost",
+    "protocol": "http",
+    "port" : 8095
+  }
+}
+
