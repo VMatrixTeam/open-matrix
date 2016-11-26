@@ -1,5 +1,5 @@
 import os
-from src.shareddata.shareddata import g_config
+from src.shareddata.shareddata import g_config, g_logger
 from src.worker.judgers.baseJudger import Judger
 from src.worker.judgers.programmingJudger.checkers import *
 class ProgrammingJudger(Judger):
@@ -17,6 +17,7 @@ class ProgrammingJudger(Judger):
                             }
 
     def judge(self, submission):
+         print "this is in the programmingJudger judge(submission)..."
          """
          @param
             submission is the detail of a student submission,
@@ -27,7 +28,7 @@ class ProgrammingJudger(Judger):
              @detail
                 submission_id : the id of current submission
                 submission_problem_id: the id of problem corresponding to current sub
-                problem_type: choice or programming
+                problem_type: 1->choice or 0->programming
                 problem_config: the config of submission
          """
          submission_id = submission["submission_id"]
@@ -50,18 +51,20 @@ class ProgrammingJudger(Judger):
          total_grade = 0
          g_logger.info("[Judger Programming] start to check submission id = " + \
                      str(submission_id))
-         for index in xrange(0, 5):
+         for index in xrange(0, len(self.m_checkers)):
+             if 2 == index:
+                 break
              #continue when this stage not in the config
              if self.m_checkers[index].getTag() not in config["grading"]:
                  continue
-
-             will_check = (index == 0) or (config["grading"][self.m_checkers[index]] > 0)
+             will_check = (index == 0) or (config["grading"][self.m_checkers[index].getTag()] > 0)
              if can_continue and will_check:
                  temp = self.m_checkers[index].check(submission)
-                 can_continue = temp["result"]["continue"]
+                 can_continue = temp["continue"]
                  total_grade = total_grade + temp["grade"]
                  ret["total_grade"] = total_grade
-                 ret[self.m_checkers[index].getTag()] = temp["report"]
+                 ret[self.m_checkers[index].getTag()] = temp
+
                  self.write_result_to_database(submission_id, ret, False)
                  g_logger.info("[Judger Programming] checking submission id={0}, \
                             chekingstage={1}, grading={2}".format(submission_id,\

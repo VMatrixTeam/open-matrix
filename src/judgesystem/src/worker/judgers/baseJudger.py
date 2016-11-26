@@ -27,7 +27,5 @@ class Judger(object):
         #get the config of database
         mysql_config = {"db":g_config["mysql"]["db"], "host":g_config["mysql"]["host"], \
                         "user":g_config["mysql"]["user"], "passwd":g_config["mysql"]["passwd"]}
-        print sql
-        print mysql_config
         #excute the mysql
         Mysqller.execute(sql, "update", **mysql_config)

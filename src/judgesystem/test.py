@@ -1,3 +1,4 @@
+from src.shareddata.shareddata import *
 """
 from src.worker.worker import *
 from src.producer.producer import *
@@ -31,9 +32,14 @@ print c.getTag()
 """
 #test ProgrammingJudger
 from src.worker.judgers.programmingJudger.programmingJudger import *
+from src.producer.producer import *
 from src.utils.sandbox.sandbox import *
+import time
 s = Sandbox("test_sandbox")
+submission = {\
+    "submission_id":19291, "problem_id":851, "problem_type":0,\
+    "problem_config":g_config["problem_config"]
+}
 pj = ProgrammingJudger("test_programmingJudger", s)
 
-print pj.checke_submission_legal(100, 100)
-print pj.checke_submission_legal(200,200)
+pj.judge(submission)

@@ -19,10 +19,9 @@ class CompileChecker(Checker):
         """
         all_related_files = []
 
-        standardFolder = g_config["filePath"]["standardFolder"] + submission["problem_id"]
-        submissionFolder = g_config["filePath"]["submissionFolder"] + submission["submission_id"]
+        standardFolder = g_config["filePath"]["standardFolder"] + str(submission["problem_id"])
+        submissionFolder = g_config["filePath"]["submissionFolder"] + str(submission["submission_id"])
         problem_config = submission["problem_config"]
-
         #get all submission files
         if "submission" in problem_config:
             for item in problem_config["submission"]:
@@ -95,32 +94,30 @@ class CompileChecker(Checker):
             compile the current submission in docker with sandbox
         """
         #define the report of compileChecker
-        ret = {"grade":0, "report":{"continue":False, self.getTag():"pass", "grade":0}}
+        ret = {"continue":False, self.getTag():"pass", "grade":0}
 
         problem_config = submission["problem_config"]
         try:
-            all_related_files = get_all_files(submission)
-            if not check_file_exists(all_related_files):
-                ret["report"][self.getTag()] = "missing compile file"
+            all_related_files = CompileChecker.get_all_files(submission)
+            if not CompileChecker.check_file_exists(all_related_files):
+                ret[self.getTag()] = "missing compile file"
                 return ret
             #put all the related files to docker
             for item in all_related_files:
                 self.m_sandbox.push(item)
             #get compile_command
-            command = create_compile_command(problem_config)
-
+            command = CompileChecker.create_compile_command(problem_config)
             compile_result = self.m_sandbox.pipe_exec("cd /tmp && " + command + "2>&1")
             #nothing indicates no warning or errors
             if "" == compile_result:
-                ret["report"]["continue"] = True
+                ret["continue"] = True
                 ret["grade"] = problem_config["grading"]["compile check"]
-                ret["report"]["grade"] = ret["grade"]
             else:
                 if "Killed" == compile_result:
-                    ret["report"][self.getTag()] = {"message":"Malicious \
+                    ret[self.getTag()] = {"message":"Malicious \
                                                 code detected", "result":"IE"}
                 else:
-                    ret["report"][self.getTag()] = compile_result[:1024]
+                    ret[self.getTag()] = compile_result[:1024]
         except:
-            ret["report"][self.getTag()] = "compile system error happend"
+            ret[self.getTag()] = "compile system error happend"
         return ret

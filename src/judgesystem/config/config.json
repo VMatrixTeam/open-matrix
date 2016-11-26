@@ -13,5 +13,74 @@
     "submissionFolder":"/home/weichuanliu/data/Submission/",
     "standardFolder":"/home/weichuanliu/data/Standard/"
   },
-  "log_position":"log/judger.log"
+  "log_position":"log/judger.log",
+
+  "problem_config":{
+    "limits":{
+      "time":1000,
+      "memory":32
+    },
+    "random":{
+      "run_times":100,
+      "compile_command":"gcc SOURCE -w -std=c++14 -o random"
+    },
+    "grading":{
+      "compile check":10,
+      "standard tests": 20,
+      "random tests":70
+    },
+    "language":"c",
+    "standard":{
+        "support":[
+
+        ],
+        "random_source":[
+            "random.c"
+        ],
+        "hidden_support":[
+
+        ],
+        "standard_input":[
+            "standard_input0",
+            "standard_input1",
+            "standard_input2",
+            "standard_input3"
+        ],
+        "standard_output":[
+            "standard_output0",
+            "standard_output1",
+            "standard_output2",
+            "standard_output3"
+        ]
+    },
+    "compilers":{
+        "c":{
+            "command":"gcc CODE_FILES -g -w -lm -o OUTPUT_PROGRAM",
+            "version":"default"
+        },
+        "c++":{
+            "command":"g++ CODE_FILES -g -w -lm -std=c++14 -o OUTPUT_PROGRAM",
+            "version":"default"
+        },
+        "clang":{
+            "command":"clang CODE_FILES -g -w -lm -o OUTPUT_PROGRAM",
+            "version":"default"
+        },
+        "clang++":{
+            "command":"clang++ CODE_FILES -g -w -lm -std=c++11 -o OUTPUT_PROGRAM",
+            "version":"default"
+        }
+    },
+    "exec_flag":"--gtest_output=xml:/tmp/Result.xml",
+    "submission":[
+        "main.c"
+    ],
+    "entry_point":"standard_main.exe",
+    "output_program":"main.exe",
+    "standard_score":100,
+    "google tests info":{
+
+    },
+    "standard_language":"c"
+  }
 }

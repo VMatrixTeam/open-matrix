@@ -130,7 +130,7 @@ class RandomChecker(Checker):
             if there is not standard exe program, generate first,
             else no need to generate
         """
-        ret = {"grade":0, "report":{"continue":False, self.getTag():{}, "grade":0}}
+        ret = {"continue":False, self.getTag():{}, "grade":0}
 
         #get neccesary information from config
         full_grade = problem_config["grading"]["random tests"]
@@ -170,7 +170,7 @@ class RandomChecker(Checker):
         #check whether the random exe program exists, if not generate
         if not os.path.exists(random_program):
             if not generate_random_exe(submission):
-                ret["report"][self.geTag()] = {"message":"no random generator found!"}
+                ret[self.geTag()] = {"message":"no random generator found!"}
         else:
             self.m_sandbox.push(random_program)
 
@@ -179,7 +179,7 @@ class RandomChecker(Checker):
         #check whether the standard exe program exists, if not, generate it
         if not os.path.exists(standard_program):
             if not generate_standard_exe(submission):
-                ret["report"][self.getTag()].update({"message":"no standard program found"})
+                ret[self.getTag()].update({"message":"no standard program found"})
                 return ret
         else:
             self.m_sandbox.pipe_exec("cd /tmp && mkdir standard_main.exe")
@@ -199,7 +199,7 @@ class RandomChecker(Checker):
                                     /tmp/random.input && cat /tmp/random.input")
             except:
                 if standard_wrong_case < 1:
-                    ret["report"][self.getTag()].update({"message":"system \
+                    ret[self.getTag()].update({"message":"system \
                                                 internal error(random program)"})
                 standard_wrong_case += 1
                 continue
@@ -215,14 +215,14 @@ class RandomChecker(Checker):
                 #check if standard program execute normal or not
                 if "OK" != temp_result["result"]:
                     if standard_wrong_case < 1:
-                        ret["report"][self.getTag()].update({"message":\
+                        ret[self.getTag()].update({"message":\
                                             "standard program internal error"})
                     standard_wrong_case += 1
                     continue
                 standard_program_output = temp_result["stdout"]
             except:
                 if standard_wrong_case < 1:
-                    ret["report"][self.getTag()].update({"message":\
+                    ret[self.getTag()].update({"message":\
                                             "standard program internal error"})
                 standard_wrong_case += 1
                 continue
@@ -238,7 +238,7 @@ class RandomChecker(Checker):
                     if (abnormal_case_count < 1):
                         temp_result["stdout"] = temp_result["stdout"][:1024]
                         temp_result["standard_stdout"] = standard_program_output[:1024]
-                        ret["report"][self.getTag()].update(temp_result)
+                        ret[self.getTag()].update(temp_result)
                     abnormal_case_count += 1
                     continue
 
@@ -248,16 +248,16 @@ class RandomChecker(Checker):
                     if correct_case_count < 1:
                         temp_result["stdout"] = temp_result["stdout"][:1024]
                         temp_result["result"] = "CR"
-                        ret["report"][self.getTag()].update(temp_result)
+                        ret[self.getTag()].update(temp_result)
                     correct_case_count += 1
                 else:
                     if wrong_case_count < 1:
                         temp_result["stdout"] = temp_result["stdout"][:1024]
                         temp_result["standard_stdout"] = standard_program_output[:1024]
                         temp_result["result"] = "WA"
-                        ret["report"][self.getTag()].update(temp_result)
+                        ret[self.getTag()].update(temp_result)
                     wrong_case_count += 1
             except:
-                ret["report"][self.getTag()].update({"messgae":"Malicious code\
+                ret[self.getTag()].update({"messgae":"Malicious code\
                             detected!", "result":"IE"})
                 return ret
