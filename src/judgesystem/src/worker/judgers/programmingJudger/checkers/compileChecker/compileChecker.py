@@ -107,7 +107,7 @@ class CompileChecker(Checker):
                 self.m_sandbox.push(item)
             #get compile_command
             command = CompileChecker.create_compile_command(problem_config)
-            compile_result = self.m_sandbox.pipe_exec("cd /tmp && " + command + "2>&1")
+            compile_result = self.m_sandbox.pipe_exec("cd /tmp && " + command + " 2>&1")
             #nothing indicates no warning or errors
             if "" == compile_result:
                 ret["continue"] = True

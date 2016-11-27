@@ -52,8 +52,6 @@ class ProgrammingJudger(Judger):
          g_logger.info("[Judger Programming] start to check submission id = " + \
                      str(submission_id))
          for index in xrange(0, len(self.m_checkers)):
-             if 2 == index:
-                 break
              #continue when this stage not in the config
              if self.m_checkers[index].getTag() not in config["grading"]:
                  continue

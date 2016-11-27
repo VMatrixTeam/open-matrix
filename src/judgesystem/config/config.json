@@ -2,8 +2,8 @@
   "mysql": {
     "host":"localhost",
     "db":"matrix",
-    "user":"root",
-    "passwd":"2829063qwe"
+    "user":"username",
+    "passwd":"password"
   },
   "sandbox": {
     "imagename":"sandbox10:libsanbox",
@@ -17,7 +17,7 @@
 
   "problem_config":{
     "limits":{
-      "time":1000,
+      "time":10000,
       "memory":32
     },
     "random":{

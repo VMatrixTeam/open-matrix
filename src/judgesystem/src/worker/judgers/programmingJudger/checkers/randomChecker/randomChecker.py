@@ -1,4 +1,5 @@
 import os
+import time
 
 from src.worker.judgers.programmingJudger.checkers.baseChecker import Checker
 from src.shareddata.shareddata import g_config, g_logger
@@ -12,7 +13,7 @@ class RandomChecker(Checker):
 
     @staticmethod
     def get_random_folder(problem_id):
-        return g_config["filePath"]["standardFolder"] + str(problem_id) + "/random_source"
+        return g_config["filePath"]["standardFolder"] + str(problem_id) + "/random_source/"
 
     def generate_random_exe(self, submission):
         """
@@ -28,13 +29,13 @@ class RandomChecker(Checker):
         random_command = problem_config["random"]["compile_command"]
         random_command = random_command.replace("SOURCE", \
                                 problem_config["standard"]["random_source"][0])
-        random_program_folder = get_random_folder(submission["problem_id"])
+        random_program_folder = RandomChecker.get_random_folder(submission["problem_id"])
         #get random program fiepath
         random_program = random_program_folder + problem_config["standard"]["random_source"][0]
         #push the random program to docker
         self.m_sandbox.push(random_program)
         try:
-            temp_result = self.m_sandbox.pipe_exec("cd /tmp && " + random_command + "2>&1")
+            temp_result = self.m_sandbox.pipe_exec("cd /tmp && " + random_command + " 2>&1")
             if "" != temp_result:
                 return False
             #copy the random execute file to local folder
@@ -87,7 +88,7 @@ class RandomChecker(Checker):
 
     @staticmethod
     def get_standard_program_folder(problem_id):
-        return g_config["filePath"]["standardFolder"] + str(problem_id) + "standard_main.exe"
+        return g_config["filePath"]["standardFolder"] + str(problem_id) + "/standard_main.exe"
 
     def generate_standard_exe(self, submission):
         """
@@ -100,11 +101,10 @@ class RandomChecker(Checker):
         """
         problem_config = submission["problem_config"]
         #get all support files,push to docker and rename support->standard_main.exe
-        standard_supprt_files = g_config["filePath"]["standardForlder"] + \
-                            str(submission["submission_id"]) + "/support"
-        self.m_sandbox.push(standard_supprt_files)
+        standard_support_files = g_config["filePath"]["standardFolder"] + \
+                            str(submission["problem_id"]) + "/support"
+        self.m_sandbox.push(standard_support_files)
         self.m_sandbox.pipe_exec("cd /tmp && mv support standard_main.exe")
-
         #get the language of current_submission
         standard_language = problem_config["standard_language"]
 
@@ -112,12 +112,12 @@ class RandomChecker(Checker):
         if "c" == standard_language or "c++" == standard_language or "pascal" ==\
                 standard_language:
             #generate compile_command
-            command = create_compile_command(problem_config)
+            command = RandomChecker.create_compile_command(problem_config)
             try:
                 compile_result = self.m_sandbox.pipe_exec("cd /tmp/standard_main.exe/ \
-                                 && " + command + "2>&1")
+                                 && " + command + " 2>&1")
                 innerfile = "/tmp/standard_main.exe/standard_main.exe"
-                standard_program_folder = get_standard_program_folder(submission["problem_id"])
+                standard_program_folder = RandomChecker.get_standard_program_folder(submission["problem_id"])
                 if False == self.m_sandbox.pull(innerfile, standard_program_folder):
                     return False
             except:
@@ -131,7 +131,7 @@ class RandomChecker(Checker):
             else no need to generate
         """
         ret = {"continue":False, self.getTag():{}, "grade":0}
-
+        problem_config = submission["problem_config"]
         #get neccesary information from config
         full_grade = problem_config["grading"]["random tests"]
         memory_limit = problem_config["limits"]["memory"]
@@ -166,19 +166,19 @@ class RandomChecker(Checker):
         standard_execute_command = standard_execute_command + \
             self.m_sandbox.getDefaultWorkspace() + "/" + entry_point + "/" + entry_point
 
-        random_program = get_random_folder(submission["problem_id"]) + "/random"
+        random_program = RandomChecker.get_random_folder(submission["problem_id"]) + "/random"
         #check whether the random exe program exists, if not generate
         if not os.path.exists(random_program):
-            if not generate_random_exe(submission):
-                ret[self.geTag()] = {"message":"no random generator found!"}
+            if not self.generate_random_exe(submission):
+                ret[self.getTag()] = {"message":"no random generator found!"}
+                return ret
         else:
             self.m_sandbox.push(random_program)
 
-        standard_program = get_standard_program_folder(submission["problem_id"])
-
+        standard_program = RandomChecker.get_standard_program_folder(submission["problem_id"])
         #check whether the standard exe program exists, if not, generate it
         if not os.path.exists(standard_program):
-            if not generate_standard_exe(submission):
+            if not self.generate_standard_exe(submission):
                 ret[self.getTag()].update({"message":"no standard program found"})
                 return ret
         else:
@@ -207,11 +207,11 @@ class RandomChecker(Checker):
             #execute the standard program using the random.input and get the
             #standard output
             try:
-                temp_result = self.m_sandbox.crun(
-                            "/policy/" + standard_language + ".json",
-                            "/tmp/random.input",
-                            time_limit,memory_limit * 1024,
-                            standard_execute_command)
+                sandbox_command = {"policy_file":"/policy/" + standard_language + ".json",\
+                                   "std_in_file":"/tmp/random.input",\
+                                   "time_limit":time_limit, "memory_limit":memory_limit * 1024,\
+                                   "program_params":standard_execute_command}
+                temp_result = self.m_sandbox.crun(**sandbox_command)
                 #check if standard program execute normal or not
                 if "OK" != temp_result["result"]:
                     if standard_wrong_case < 1:
@@ -229,11 +229,11 @@ class RandomChecker(Checker):
 
             #execute the student submission, and get the output of it, compare
             try:
-                temp_result = self.m_sandbox.crun(
-                            "/policy/" + standard_language + ".json",
-                            "/tmp/random.input",
-                            time_limit, memory_limit * 1024,
-                            execute_command)
+                sandbox_command = {"policy_file":"/policy/" + standard_language + ".json",\
+                                   "std_in_file":"/tmp/random.input",\
+                                   "time_limit":time_limit, "memory_limit":memory_limit * 1024,\
+                                   "program_params":execute_command}
+                temp_result = self.m_sandbox.crun(**sandbox_command)
                 if "OK" != temp_result["result"]:
                     if (abnormal_case_count < 1):
                         temp_result["stdout"] = temp_result["stdout"][:1024]
@@ -261,3 +261,6 @@ class RandomChecker(Checker):
                 ret[self.getTag()].update({"messgae":"Malicious code\
                             detected!", "result":"IE"})
                 return ret
+        ret["grade"] = float(correct_case_count) / float(random_time) * problem_config["grading"][self.getTag()]
+        ret["continue"] = True
+        return ret

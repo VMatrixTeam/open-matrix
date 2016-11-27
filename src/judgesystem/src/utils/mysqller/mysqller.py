@@ -18,12 +18,13 @@ class Mysqller():
             cur = conn.cursor()
             cur.execute(sql)
             conn.commit()
-            print 'finished commit'
         except:
             conn.close()
             return result
 
         if 'query' == method:
             result = cur.fetchall()
+        else:
+            print 'finished commit'
         conn.close()
         return result

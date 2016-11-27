@@ -18,6 +18,7 @@ class StandardChecker(Checker):
         input_files = []
         for item in os.listdir(standardInputFolder):
             input_files.append(standardInputFolder + item)
+        input_files.sort()
         return input_files
 
     @staticmethod
@@ -28,9 +29,14 @@ class StandardChecker(Checker):
         """
         standardOutputFolder = g_config["filePath"]["standardFolder"] + \
                                str(problem_id) + "/standard_output/"
+        output_files = []
         output_contents = []
         for item in os.listdir(standardOutputFolder):
-            tmp = open(standardOutputFolder+item)
+            output_files.append(standardOutputFolder + item)
+        output_files.sort()
+        print output_files
+        for item in output_files:
+            tmp = open(item)
             output_contents.append(tmp.read())
             tmp.close()
         return output_contents
@@ -73,41 +79,39 @@ class StandardChecker(Checker):
 
         execute_command = execute_command + self.m_sandbox.getDefaultWorkspace()\
                           + "/" + program_name
-
+        print "the test amount is:" , all_test_amount
         for index in xrange(0, all_test_amount):
             self.m_sandbox.push(all_input_files[index])
-            #try:
-            sandbox_command = {"policy_file":"/policy/" + standard_language + ".json",\
-                               "std_in_file":self.m_sandbox.getDefaultWorkspace() + "/"\
-                                + os.path.basename(all_input_files[index]),\
-                               "time_limit":time_limit, "memory_limit":memory_limit * 1024,\
-                               "program_params":execute_command}
-            print sandbox_command
-            checker_result = self.m_sandbox.crun(**sandbox_command)
-            print checker_result
-            #if result is ok, the docker execute normal
-            if "OK" == checker_result["result"]:
-                if checker_result["stdout"] == all_output_contents[index]:
-                    correct_case_count += 1
+            try:
+                sandbox_command = {"policy_file":"/policy/" + standard_language + ".json",\
+                                   "std_in_file":self.m_sandbox.getDefaultWorkspace() + "/"\
+                                    + os.path.basename(all_input_files[index]),\
+                                   "time_limit":time_limit, "memory_limit":memory_limit * 1024,\
+                                   "program_params":execute_command}
+                checker_result = self.m_sandbox.crun(**sandbox_command)
+                #if result is ok, the docker execute normal
+                if "OK" == checker_result["result"]:
+                    if checker_result["stdout"] == all_output_contents[index]:
+                        correct_case_count += 1
+                    else:
+                        wrong_case_count += 1
+                        #only record one error report
+                        if wrong_case_count <= 1:
+                            checker_result["stdout"] = checker_result["stdout"][:1024]
+                            checker_result["standard_stdout"] = all_output_contents[index]
+                            checker_result["result"] = "WA"
+                            ret[self.getTag()].update(checker_result)
                 else:
-                    wrong_case_count += 1
-                    #only record one error report
-                    if wrong_case_count <= 1:
+                    abnormal_case_count += 1
+                    if abnormal_case_count <= 1:
                         checker_result["stdout"] = checker_result["stdout"][:1024]
                         checker_result["standard_stdout"] = all_output_contents[index]
-                        checker_result["result"] = "WA"
                         ret[self.getTag()].update(checker_result)
-            else:
-                abnormal_case_count += 1
-                if abnormal_case_count <= 1:
-                    checker_result["stdout"] = checker_result["stdout"][:1024]
-                    checker_result["standard_stdout"] = all_output_contents[index]
-                    ret[self.getTag()].update(checker_result)
-            #except:
-            #    ret[self.getTag()] = {"message":"Malicious code detected!",\
-            #                                    "result":"IE"}
+            except:
+                ret[self.getTag()] = {"message":"Malicious code detected!",\
+                                                "result":"IE"}
                 return ret
 
-            ret["grade"] = float(correct_case_count) / float(all_test_amount)
-            ret["continue"] = True
-            return ret
+        ret["grade"] = float(correct_case_count) / float(all_test_amount) * problem_config["grading"][self.getTag()]
+        ret["continue"] = True
+        return ret

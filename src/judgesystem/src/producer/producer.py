@@ -1,4 +1,5 @@
 import time
+import json
 from multiprocessing import Process
 
 from src.shareddata.shareddata import *
@@ -31,7 +32,7 @@ class Producer(Process):
             for item in result:
                 submission["submission_id"] = item[0]
                 submission["problem_id"] = item[1]
-                submission["problem_config"] = item[2]
+                submission["problem_config"] = json.loads(item[2])
                 submission["problem_type"] = item[3]
                 g_queue.put(submission)
 
