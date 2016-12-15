@@ -33,11 +33,11 @@ class ProgrammingJudger(Judger):
                 submission_problem_id: the id of problem corresponding to current sub
                 problem_type: choice or programming
                 submission_type:student submission or teacher design a problem
-                submission_config: the config of submission
+                submission_problem_config: the config of submission
          """
          submission_id = submission["submission_id"]
          problem_id = submission["problem_id"]
-         config = submission["submission_config"]
+         config = submission["submission_problem_config"]
          # ret is used to store the judge result
          ret["total_grade"] = 0
          ret["submission_id"] = submission_id
