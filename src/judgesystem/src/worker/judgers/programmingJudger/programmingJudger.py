@@ -25,7 +25,7 @@ class ProgrammingJudger(Judger):
          @param
             submission is the detail of a student submission,
             @structure is as:
-                {"submission_id":s_id, "submission_problem_id":p_id,
+                {"submission_id":s_id, "problem_id":p_id,
                  "problem_type":p_type, "submission_type":s_type,
                  "submission_problem_config":config}
              @detail
